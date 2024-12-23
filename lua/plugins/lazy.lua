@@ -126,7 +126,7 @@ lazy.setup({
     --Automatically toggle between relative and absolute line numbers
     {
         'sitiom/nvim-numbertoggle',
-        event = { 'VeryLazy' },
+        event = { 'BufNewFile', 'BufReadPost' },
     },
 
     --Auto remove search highlight and rehighlight when using n or N
