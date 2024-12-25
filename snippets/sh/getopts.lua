@@ -13,7 +13,7 @@ return {
 
         fmta(
             [[
-                while getopts "h" opt; do
+                while getopts ":h" opt; do
                     case $opt in
                     h)
                         usage
