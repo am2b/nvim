@@ -6,7 +6,7 @@ local fmta = require("luasnip.extras.fmt").fmta
 return {
     s(
         {
-            trig = ";so",
+            trig = ";libs",
             dscr = "source bash libs",
             snippetType = "autosnippet",
         },

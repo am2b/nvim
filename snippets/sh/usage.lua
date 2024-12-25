@@ -18,7 +18,7 @@ return {
                     script=$(basename "$0")
                     echo "usage:"
                     echo "$script <>"
-                    exit 0
+                    exit 1
                 }
 
                 <>

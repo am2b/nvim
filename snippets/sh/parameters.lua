@@ -13,9 +13,11 @@ return {
 
         fmta(
             [[
-                if (("$#" <> <>)); then
-                    usage
-                fi
+                check_parameters() {
+                    if (("$#" <> <>)); then
+                        usage
+                    fi
+                }
 
                 <>
             ]],

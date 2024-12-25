@@ -13,21 +13,40 @@ return {
 
         fmta(
             [[
-                while getopts ":h" opt; do
-                    case $opt in
-                    h)
-                        usage
-                        ;;
-                    *)
-                        echo "error:unsupported option -$opt"
-                        usage
-                        ;;
-                    esac
-                done
-                shift $((OPTIND - 1))
+                process_opts() {
+                    while getopts ":h" opt; do
+                        case $opt in
+                        h)
+                            usage
+                            ;;
+                        *)
+                            echo "error:unsupported option -$opt"
+                            usage
+                            ;;
+                        esac
+                    done
+                }
 
                 <>
         ]],
+
+            { i(0) }
+        )
+    ),
+
+    s(
+        {
+            trig = ";sopts",
+            dscr = "shift options",
+            snippetType = "autosnippet",
+        },
+
+        fmta(
+            [[
+                shift $((OPTIND - 1))
+
+                <>
+            ]],
 
             { i(0) }
         )
