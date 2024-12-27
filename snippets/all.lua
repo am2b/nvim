@@ -56,4 +56,44 @@ return {
             }
         )
     ),
+
+    s(
+        {
+            trig = ";date",
+            dscr = "insert current date",
+            snippetType = "autosnippet",
+        },
+
+        fmta(
+            [[
+                <>
+            ]],
+
+            {
+                f(function()
+                    return os.date("%Y-%m-%d")
+                end),
+            }
+        )
+    ),
+
+    s(
+        {
+            trig = ";dtime",
+            dscr = "insert current date and time",
+            snippetType = "autosnippet",
+        },
+
+        fmta(
+            [[
+                <>
+            ]],
+
+            {
+                f(function()
+                    return os.date("%Y-%m-%d %H:%M:%S")
+                end),
+            }
+        )
+    ),
 }
