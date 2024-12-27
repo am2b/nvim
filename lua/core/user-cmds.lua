@@ -89,3 +89,11 @@ vim.api.nvim_create_user_command(
     end,
     { nargs = 0, desc = 'toggle executable permission of current file' }
 )
+
+vim.api.nvim_create_user_command('MyInsertDate', function()
+    vim.api.nvim_put({ os.date("%Y-%m-%d") }, 'c', true, true)
+end, { desc = 'insert date' })
+
+vim.api.nvim_create_user_command('MyInsertDateTime', function()
+    vim.api.nvim_put({ os.date("%Y-%m-%d %H:%M:%S") }, 'c', true, true)
+end, { desc = 'insert date and time' })
