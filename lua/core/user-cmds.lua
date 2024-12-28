@@ -97,3 +97,27 @@ end, { desc = 'insert date' })
 vim.api.nvim_create_user_command('MyInsertDateTime', function()
     vim.api.nvim_put({ os.date("%Y-%m-%d %H:%M:%S") }, 'c', true, true)
 end, { desc = 'insert date and time' })
+
+vim.api.nvim_create_user_command('MyInsertPass', function(opts)
+    local nvim_config_path = vim.fn.stdpath("config")
+    local script = nvim_config_path .. "/scripts/generate_password.sh"
+    --当nargs为"?"时opts.args是可选参数,那么没有传递参数时opts.args的值默认为空字符串,而空字符串在lua里面被认为是true
+    local len = opts.args ~= "" and opts.args or "64"
+    local command = string.format("%s %s", script, len)
+    --vim.fn.systemlist():执行外部命令并捕获输出
+    --vim.fn.systemlist("command")返回一个表(数组),每个元素是一行命令输出,[1]表示从vim.fn.systemlist的返回值中获取第一行的内容
+    local result = vim.fn.systemlist(command)
+    local password = result[1]
+    if vim.v.shell_error == 0 and password then
+        vim.api.nvim_set_current_line(password)
+    else
+        print("failed to generate password")
+    end
+    --nargs = "?":表示命令接受可选参数
+end, { nargs = "?", desc = 'insert password' })
+--vim.fn.stdpath 支持以下参数:
+--"config":返回用户的配置目录(通常为:~/.config/nvim)
+--"data":返回用户的数据目录(通常为:~/.local/share/nvim)
+--"cache":返回用户的缓存目录(通常为:~/.cache/nvim)
+--"state":返回用户的状态目录(通常为:~/.local/state/nvim)
+--"runtime":返回运行时文件的目录(包含config和data的子路径)
