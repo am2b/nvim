@@ -4,9 +4,9 @@
 --replaced by plugin:yanky.nvim
 --vim.cmd[[au TextYankPost * silent! lua vim.highlight.on_yank {timeout=500,on_visual=false}]]
 
-vim.api.nvim_create_user_command("Myrc", "source $MYVIMRC", { desc = "reload neovim configuration" })
+vim.api.nvim_create_user_command("MyReloadConfig", "source $MYVIMRC", { desc = "reload neovim configuration" })
 
-vim.api.nvim_create_user_command('Myrp', function()
+vim.api.nvim_create_user_command('MyReplaceMarks', function()
     local file_name = vim.fn.expand('%')
     vim.cmd('w')
     vim.cmd('!text_replace_chinese_punctuation_marks.sh ' .. file_name)
@@ -27,7 +27,7 @@ end, { nargs = 0, desc = 'replace chinese punctuation marks' }
 --bit.band(stat.mode, 0x40) ~= 0:文件具有用户可执行权限
 --bit.band(stat.mode, 0x40) == 0:文件没有用户可执行权限
 vim.api.nvim_create_user_command(
-    "Myax",
+    "MyAddX",
     function()
         local file_name = vim.fn.expand('%')
         if file_name ~= "" then
@@ -49,7 +49,7 @@ vim.api.nvim_create_user_command(
 )
 
 vim.api.nvim_create_user_command(
-    "Myrx",
+    "MyRemoveX",
     function()
         local file_name = vim.fn.expand('%')
         if file_name ~= "" then
@@ -71,7 +71,7 @@ vim.api.nvim_create_user_command(
 )
 
 vim.api.nvim_create_user_command(
-    "Mytx",
+    "MyToggleX",
     function()
         local file_name = vim.fn.expand('%')
         if file_name ~= "" then
