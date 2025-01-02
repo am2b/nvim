@@ -33,9 +33,7 @@ return {
 
         fmta(
             [[
-                error_msg "$LINENO"
-
-                <>
+                error_msg "$LINENO"<>
             ]],
 
             { i(0) }
