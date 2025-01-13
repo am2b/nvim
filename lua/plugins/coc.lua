@@ -4,7 +4,7 @@ return {
     'neoclide/coc.nvim',
     branch = 'release',
 
-    event = { 'InsertEnter' },
+    event = { 'VimEnter' },
 
     config = function()
         vim.keymap.set('n', '<space>fm', '<Plug>(coc-format)', { silent = true, desc = "Normal:format by coc" })
