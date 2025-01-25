@@ -121,3 +121,37 @@ end, { nargs = "?", desc = 'insert password' })
 --"cache":返回用户的缓存目录(通常为:~/.cache/nvim)
 --"state":返回用户的状态目录(通常为:~/.local/state/nvim)
 --"runtime":返回运行时文件的目录(包含config和data的子路径)
+
+--totp:
+vim.api.nvim_create_user_command("MyTotp", function()
+    local line = vim.api.nvim_get_current_line()
+
+    local handle = io.popen(string.format("bash totp.sh '%s'", line))
+    if handle then
+        local result = handle:read("*a")
+        handle:close()
+        result = vim.trim(result)
+        vim.api.nvim_echo({ { "TOTP:" .. result, "String" } }, false, {})
+    end
+end, {})
+
+--vim.api.nvim_echo(chunks, history, opts)
+--参数:
+--chunks(列表):包含要显示的消息片段,每个片段由一对组成:
+--文本内容(字符串):要显示的具体消息内容
+--高亮组(字符串):Neovim中定义的高亮组名称,用于控制消息的颜色样式,如果不需要高亮,使用空字符串""
+
+--history(布尔值):是否将消息存入消息历史中
+--true:将消息加入历史(可以通过:messages查看)
+--false:不加入历史,仅短暂显示
+
+--opts(表):目前是保留参数,通常传入空表{}
+
+--高亮组(HighlightGroups)是Neovim中的颜色样式,用户可以通过:highlight命令查看和自定义,以下是常用的高亮组:
+--ErrorMsg:通常为红色,用于错误提示
+--WarningMsg:通常为黄色,用于警告
+--String:通常为绿色,用于字符串
+--None:默认颜色,无高亮
+
+--你可以自定义这些高亮组的颜色,例如:
+--highlight ErrorMsg guifg=#ff0000 guibg=#000000 gui=bold
