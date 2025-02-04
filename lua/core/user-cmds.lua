@@ -131,7 +131,9 @@ vim.api.nvim_create_user_command("MyTotp", function()
         local result = handle:read("*a")
         handle:close()
         result = vim.trim(result)
-        vim.api.nvim_echo({ { "TOTP:" .. result, "String" } }, false, {})
+        --copy to clipboard
+        vim.fn.setreg("+", result)
+        vim.api.nvim_echo({ { "TOTP: " .. result .. " (copied)", "String" } }, false, {})
     end
 end, {})
 
