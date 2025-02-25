@@ -55,6 +55,11 @@
             "provider": "autopep8"
         }
     },
+    "go": {
+        "checkForUpdates": "off",
+        "goplsPath": "${userHome}/.go-workspace/bin/gopls",
+        "formatTool": "gofmt"
+    },
     "json.schemas": [
         {
             "fileMatch": [
