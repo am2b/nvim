@@ -22,9 +22,6 @@ A blazing fast and easy to configure neovim statusline plugin
 ### [lukas-reineke/indent-blankline.nvim](https://github.com/lukas-reineke/indent-blankline.nvim):<br>
 Indent guides for neovim
 
-### [nvim-tree/nvim-tree.lua](https://github.com/nvim-tree/nvim-tree.lua):<br>
-A file explorer tree for neovim
-
 ### [numToStr/Comment.nvim](https://github.com/numToStr/Comment.nvim):<br>
 Smart and powerful comment plugin
 
@@ -48,9 +45,6 @@ Configurations and abstraction layer for neovim
 
 ### [nvim-telescope/telescope.nvim](https://github.com/nvim-telescope/telescope.nvim):<br>
 Telescope's purpose is to provide an interface to filter a list of items
-
-### [nvim-telescope/telescope-file-browser.nvim](https://github.com/nvim-telescope/telescope-file-browser.nvim):<br>
-File browser extension for telescope.nvim
 
 ### [folke/persistence.nvim](https://github.com/folke/persistence.nvim):<br>
 Session management
