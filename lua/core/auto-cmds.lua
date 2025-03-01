@@ -9,10 +9,15 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 --自动保存
+local auto_save_excluded_types = { lua = true }
 vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
     group = augroup_user,
     pattern = "*",
-    command = "silent! wall"
+    callback = function()
+        if not auto_save_excluded_types[vim.bo.filetype] then
+            vim.cmd("silent! wall")
+        end
+    end,
 })
 
 vim.api.nvim_create_autocmd('FileType', {
