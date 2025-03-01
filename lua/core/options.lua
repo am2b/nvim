@@ -21,8 +21,8 @@
 
 --disable netrw
 --set the following at the very beginning of init.lua
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+--vim.g.loaded_netrw = 1
+--vim.g.loaded_netrwPlugin = 1
 
 --with vim.opt we can set global, window and buffer settings
 local set = vim.opt

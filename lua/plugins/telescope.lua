@@ -69,12 +69,6 @@ return {
                 --大小写智能匹配
                 case_mode = "smart_case",
             },
-
-            file_browser = {
-                hijack_netrw = true,
-                hidden = true,
-                respect_gitignore = false,
-            },
         },
     },
 
