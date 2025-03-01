@@ -45,10 +45,10 @@ lazy.setup({
     { 'folke/tokyonight.nvim' },
 
     --A dependency library for many plugins
-    { 'nvim-lua/plenary.nvim',                  lazy = true },
+    { 'nvim-lua/plenary.nvim',            lazy = true },
 
     --Provides Nerd Font icons for use by neovim plugins
-    { 'nvim-tree/nvim-web-devicons',            lazy = true },
+    { 'nvim-tree/nvim-web-devicons',      lazy = true },
 
     --Seamless navigation between tmux panes and vim splits
     { 'christoomey/vim-tmux-navigator' },
@@ -61,9 +61,6 @@ lazy.setup({
 
     --Indent guides
     { import = 'plugins.indent-blankline' },
-
-    --A file explorer tree for neovim
-    { import = 'plugins.nvim-tree' },
 
     --Smart and powerful comment plugin
     { import = 'plugins.comment' },
@@ -88,9 +85,6 @@ lazy.setup({
 
     --Telescope's purpose is to provide an interface to filter a list of items
     { import = 'plugins.telescope' },
-
-    --File browser extension for telescope.nvim
-    { import = 'plugins.telescope-file-browser' },
 
     --Session management
     { import = 'plugins.persistence' },
