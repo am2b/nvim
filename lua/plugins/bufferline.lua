@@ -11,21 +11,6 @@ return {
 
     opts = {
         options = {
-            offsets = {
-                {
-                    filetype = "NvimTree",
-                    text = "File Explorer",
-                    text_align = "center",
-                    separator = true,
-                },
-                {
-                    filetype = "Outline",
-                    text = "Symbols Outline",
-                    text_align = "center",
-                    separator = true,
-                },
-            },
-
             --显示buffer ID
             numbers = "buffer_id",
             --显示活动buffer的指示器

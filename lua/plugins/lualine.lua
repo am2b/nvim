@@ -27,8 +27,8 @@ return {
                 component_separators = { left = '', right = '' },
 
                 disabled_filetypes = {
-                    statusline = { 'NvimTree', 'undotree', 'Outline' },
-                    winbar = { 'help', 'NvimTree', 'Trouble', 'Outline', 'toggleterm' },
+                    statusline = { 'undotree' },
+                    winbar = { 'help', 'Trouble', 'toggleterm' },
                 },
             },
 
