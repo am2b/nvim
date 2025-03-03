@@ -89,11 +89,9 @@ return {
         local builtin = require('telescope.builtin')
         --file pickers
         --lists files in current working directory, respects .gitignore
-        --vim.keymap.set('n', '<c-o>', builtin.find_files, { desc = "Telescope:find file" })
         vim.keymap.set('n', '<leader>o', builtin.find_files, { desc = "Telescope:find file" })
 
         --search for a string in current working directory and get results live as you type
-        --vim.keymap.set('n', '<c-i>', builtin.live_grep, { desc = "Telescope:find string" })
         vim.keymap.set('n', '<leader>i', builtin.live_grep, { desc = "Telescope:find string" })
 
         --searches for the string under your cursor or selection in your current working directory
