@@ -16,7 +16,7 @@ local keymap = vim.keymap
 --|:move as 0
 --c-o:go to older cursor position in jump list
 --c-i:go to newer cursor position in jump list
-keymap.set("n", "<leader>n", "`.", { desc = "Normal:Move cursor to the last edit position" })
+--keymap.set("n", "<leader>n", "`.", { desc = "Normal:Move cursor to the last edit position" })
 
 --upper inside word
 keymap.set("n", "<leader>u", "gUiwe", { desc = "Normal:Upper inside word" })
