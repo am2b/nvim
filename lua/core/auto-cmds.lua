@@ -49,3 +49,5 @@ vim.api.nvim_create_autocmd('InsertEnter', {
         vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<cmd>noh<cr>', true, true, true), 'n', false)
     end
 })
+
+require("core.gpg-yank")
