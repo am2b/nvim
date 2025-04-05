@@ -1,8 +1,8 @@
 local group = vim.api.nvim_create_augroup('auto_cmds_gpg', { clear = true })
 
-local gpg_workspace = vim.fn.expand("~") .. "/.keyring/.workspace/*"
+local gpg_workspace = vim.fn.expand("~") .. "/.key-ring/.workspace/*"
 
---定义一个函数,在~/.keyring/.workspace目录下去掉yy复制时的换行符
+--定义一个函数,在~/.key-ring/.workspace目录下去掉yy复制时的换行符
 local function yank_without_n()
     --获取当前行内容(不包含换行符)
     local line = vim.fn.getline(".")
@@ -14,7 +14,7 @@ local function yank_without_n()
     require('utils.notify').notify_with_timeout("call yank_without_n", 3000)
 end
 
---当进入~/.keyring/.workspace目录下的文件时,修改yy行为
+--当进入~/.key-ring/.workspace目录下的文件时,修改yy行为
 vim.api.nvim_create_autocmd("BufEnter", {
     group = group,
     pattern = gpg_workspace,
@@ -24,7 +24,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
     end
 })
 
---当离开~/.keyring/.workspace目录的文件时,恢复默认yy行为
+--当离开~/.key-ring/.workspace目录的文件时,恢复默认yy行为
 vim.api.nvim_create_autocmd("BufLeave", {
     group = group,
     pattern = gpg_workspace,
