@@ -137,6 +137,20 @@ vim.api.nvim_create_user_command("MyTotp", function()
     end
 end, {})
 
+vim.api.nvim_create_user_command('MySortImports', function(opts)
+    --获取当前文件的绝对路径
+    local file_path = vim.fn.expand('%:p')
+    if vim.bo.filetype == 'python' then
+        --获取neovim配置目录并构建脚本路径
+        local nvim_config_path = vim.fn.stdpath('config')
+        local script_path = nvim_config_path .. '/scripts/python_sort_imports.sh'
+        --执行bash脚本,并传递当前python文件路径
+        vim.fn.system('bash ' .. script_path .. ' ' .. file_path)
+        --刷新当前文件(重新加载buffer)
+        vim.api.nvim_command('edit')
+    end
+end, {})
+
 --vim.api.nvim_echo(chunks, history, opts)
 --参数:
 --chunks(列表):包含要显示的消息片段,每个片段由一对组成:
