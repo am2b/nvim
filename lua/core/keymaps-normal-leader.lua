@@ -25,5 +25,11 @@ keymap.set("n", "<leader>u", "gUiwe", { desc = "Normal:Upper inside word" })
 keymap.set("n", "<leader>yf", "<cmd>%y<cr>", { desc = "Normal:Copy entire file" })
 
 --jump list
---keymap.set("n", "<leader>o", "<c-o>", { noremap = true, desc = "Normal:Jump to older position" })
---keymap.set("n", "<leader>i", "<c-i>", { noremap = true, desc = "Normal:Jump to newer position" })
+
+local log = require("utils.log")
+local my_variable = "This is a test message."
+log.log(my_variable)
+
+-- 打印 table 示例
+--local my_table = { name = "Alice", age = 25 }
+--log.log(my_table)
