@@ -15,6 +15,7 @@ return {
             [[
                 main() {
                     check_parameters "${@}"
+                    OPTIND=1
                     process_opts "${@}"
                     shift $((OPTIND - 1))
 

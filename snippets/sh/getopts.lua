@@ -17,10 +17,10 @@ return {
                     while getopts ":h" opt; do
                         case $opt in
                         h)
-                            usage
+                            usage 0
                             ;;
                         *)
-                            echo "error:unsupported option -$opt"
+                            echo "error:unsupported option -$opt" >>&2
                             usage
                             ;;
                         esac
