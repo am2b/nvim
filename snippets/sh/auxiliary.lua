@@ -87,4 +87,63 @@ return {
             { i(0) }
         )
     ),
+
+    s(
+        {
+            trig = ";bn",
+            dscr = "return basename",
+            snippetType = "autosnippet",
+        },
+
+        fmta(
+            [[
+                $(basename <>)
+                <>
+            ]],
+
+            { i(1), i(0) }
+        )
+    ),
+
+    s(
+        {
+            trig = ";dn",
+            dscr = "return dirname",
+            snippetType = "autosnippet",
+        },
+
+        fmta(
+            [[
+                $(dirname <>)
+                <>
+            ]],
+
+            { i(1), i(0) }
+        )
+    ),
+
+    s(
+        {
+            trig = ";fw",
+            dscr = "find + while",
+            snippetType = "autosnippet",
+        },
+
+        fmta(
+            [[
+                while IFS= read -r -d '' <>; do
+                    <>
+                done << <<(find <> -path './.git' -prune -o \( -type <> ! -name '.DS_Store' -print0 \))
+                <>
+            ]],
+
+            {
+                i(1, "file"),
+                i(2, "echo \"${file}\""),
+                i(3, "."),
+                i(4, "f"),
+                i(0),
+            }
+        )
+    ),
 }

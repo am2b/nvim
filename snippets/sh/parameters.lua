@@ -14,7 +14,7 @@ return {
         fmta(
             [[
                 check_parameters() {
-                    if (("$#" <> <>)); then
+                    if (("$#" <>)); then
                         usage
                     fi
                 }
@@ -22,7 +22,7 @@ return {
                 <>
             ]],
 
-            { i(1, "=="), i(2, "1"), i(0) }
+            { i(1), i(0) }
         )
     ),
 }
