@@ -7,13 +7,13 @@ return {
     s(
         {
             trig = ";sabs",
-            dscr = "get my absolute path for source",
+            dscr = "source script",
             snippetType = "autosnippet",
         },
 
         fmta(
             [[
-                SELF_ABS_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+                SELF_ABS_DIR=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
                 source "${SELF_ABS_DIR}"/<>
 
                 <>
