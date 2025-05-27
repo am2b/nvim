@@ -1,17 +1,20 @@
 --https://github.com/L3MON4D3/LuaSnip
 
---:echo stdpath('config') -> ~/.config/nvim
-
 return {
     'L3MON4D3/LuaSnip',
+    --安装javascript正则表达式支持,增强匹配能力
     build = 'make install_jsregexp',
 
     event = { 'InsertEnter' },
 
     config = function()
+        --设置自定义代码片段存放路径为~/.config/nvim/snippets
+        --:echo stdpath('config') -> ~/.config/nvim
         local snippets_path = vim.fn.stdpath('config') .. '/snippets'
+        --引入加载器:lua格式
         local loaders_lua = require("luasnip.loaders.from_lua")
-        local loaders_vs = require("luasnip.loaders.from_vscode")
+        --引入加载器:vscode格式
+        --local loaders_vs = require("luasnip.loaders.from_vscode")
 
         require("luasnip").setup({
             --enable automatic snippet expansion
@@ -25,19 +28,22 @@ return {
             update_events = "TextChanged,TextChangedI",
         })
 
+        --从自定义路径加载lua格式的代码片段
         loaders_lua.lazy_load({ paths = { snippets_path, } })
-        --lazy_load() function will load any snippet we have in our runtimepath(friendly-snippets)
-        loaders_vs.lazy_load()
+        --加载vscode风格的代码片段(通常来自friendly-snippets插件)
+        --loaders_vs.lazy_load()
 
         --configure a command to edit the snippet files.
+        --创建:LuaSnipEdit命令,用于快速编辑代码片段文件
         vim.cmd [[command! LuaSnipEdit :lua require("luasnip.loaders.from_lua").edit_snippet_files()]]
 
+        --c-o:展开代码片段,只有当有可展开片段时生效
         --use <c-o> to expand
         --imap and smap are intentionally used instead of inoremap and snoremap—this is standard (and necessary) practice when defining <Plug> mappings.
         --see :help luasnip-api-reference
         vim.cmd [[imap <silent><expr> <c-o> luasnip#expandable() ? '<Plug>luasnip-expand-snippet' : '<c-o>']]
 
-        --jump to the next and previous placeholder
+        --c-f,c-d:jump to the next and previous placeholder
         vim.cmd [[imap <silent><expr> <c-f> luasnip#jumpable(1) ? '<Plug>luasnip-jump-next' : '<c-f>']]
         vim.cmd [[smap <silent><expr> <c-f> luasnip#jumpable(1) ? '<Plug>luasnip-jump-next' : '<c-f>']]
         vim.cmd [[imap <silent><expr> <c-d> luasnip#jumpable(-1) ? '<Plug>luasnip-jump-prev' : '<c-d>']]
