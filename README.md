@@ -49,9 +49,6 @@ Telescope's purpose is to provide an interface to filter a list of items
 ### [folke/persistence.nvim](https://github.com/folke/persistence.nvim):<br>
 Session management
 
-### [neoclide/coc.nvim](https://github.com/neoclide/coc.nvim):<br>
-Host language servers and load extensions like VSCode
-
 ### [L3MON4D3/LuaSnip](https://github.com/L3MON4D3/LuaSnip):<br>
 Snippet engine
 

@@ -89,10 +89,6 @@ lazy.setup({
     --Session management
     { import = 'plugins.persistence' },
 
-    --coc.nvim的配置文件位于~/.config/nvim/coc-settings.json中,你可以在这里设置补全行为,lsp配置和其他选项
-    --Host language servers and load extensions like VSCode
-    { import = 'plugins.coc' },
-
     --Snippet engine
     { import = 'plugins.luasnip' },
 
