@@ -89,8 +89,24 @@ lazy.setup({
     --Session management
     { import = 'plugins.persistence' },
 
+    --nvim-lspconfig:用于简化语言服务器的配置
+    { import = 'plugins.nvim-lspconfig' },
+
     --Snippet engine
     { import = 'plugins.luasnip' },
+
+    --自动补全
+    --会安装以下插件:
+    --nvim-cmp
+    --cmp-nvim-lsp
+    --cmp-buffer
+    --cmp-cmdline
+    --cmp-path
+    --cmp_luasnip
+    { import = "plugins.nvim-cmp" },
+
+    --格式化
+    --{ import = "plugins.conform" },
 
     --Debug Adapter Protocol client implementation for neovim
     { import = 'plugins.dap-adapters' },
