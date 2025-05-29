@@ -26,9 +26,9 @@ keymap.set("n", "<leader>yf", "<cmd>%y<cr>", { desc = "Normal:Copy entire file" 
 
 --jump list
 
-local log = require("utils.log")
-local my_variable = "This is a test message."
-log.log(my_variable)
+--local log = require("utils.log")
+--local my_variable = "This is a test message."
+--log.log(my_variable)
 
 -- 打印 table 示例
 --local my_table = { name = "Alice", age = 25 }

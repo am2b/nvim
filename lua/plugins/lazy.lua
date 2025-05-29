@@ -105,18 +105,6 @@ lazy.setup({
     --cmp_luasnip
     { import = "plugins.nvim-cmp" },
 
-    --格式化
-    --{ import = "plugins.conform" },
-
-    --Debug Adapter Protocol client implementation for neovim
-    { import = 'plugins.dap-adapters' },
-
-    --UI for nvim-dap
-    { import = 'plugins.dap-ui' },
-
-    --Displays the values of variables and the evaluation results of expressions
-    { import = 'plugins.dap-virtual-text' },
-
     --A full suite of window management enhancements
     { import = 'plugins.focus' },
 
