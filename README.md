@@ -49,17 +49,14 @@ Telescope's purpose is to provide an interface to filter a list of items
 ### [folke/persistence.nvim](https://github.com/folke/persistence.nvim):<br>
 Session management
 
+### [neovim/nvim-lspconfig](https://github.com/neovim/nvim-lspconfig):<br>
+Quickstart configs for neovim LSP
+
 ### [L3MON4D3/LuaSnip](https://github.com/L3MON4D3/LuaSnip):<br>
 Snippet engine
 
-### [mfussenegger/nvim-dap](https://github.com/mfussenegger/nvim-dap):<br>
-Debug Adapter Protocol client implementation for neovim
-
-### [rcarriga/nvim-dap-ui](https://github.com/rcarriga/nvim-dap-ui):<br>
-UI for nvim-dap
-
-### [theHamsta/nvim-dap-virtual-text](https://github.com/theHamsta/nvim-dap-virtual-text):<br>
-Displays the values of variables and the evaluation results of expressions
+### [hrsh7th/nvim-cmp](https://github.com/hrsh7th/nvim-cmp):<br>
+Complete
 
 ### [nvim-focus/focus.nvim](https://github.com/nvim-focus/focus.nvim):<br>
 A full suite of window management enhancements

@@ -1,3 +1,5 @@
+--https://github.com/hrsh7th/nvim-cmp
+
 return {
     --hrsh7th/nvim-cmp:自动补全框架的主插件
     "hrsh7th/nvim-cmp",

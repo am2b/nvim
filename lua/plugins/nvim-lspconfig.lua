@@ -1,3 +1,5 @@
+--https://github.com/neovim/nvim-lspconfig
+
 return {
     "neovim/nvim-lspconfig",
     --打开一个文件或新建一个文件时才加载该插件
