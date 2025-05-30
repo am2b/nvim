@@ -25,6 +25,12 @@ return {
         local cmp = require("cmp")
         local luasnip = require("luasnip")
 
+        --判断光标前是否有非空字符
+        local has_words_before = function()
+            local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+            return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+        end
+
         cmp.setup({
             completion = {
                 --关闭自动弹出
@@ -35,8 +41,10 @@ return {
                 ["<tab>"] = function(fallback)
                     if cmp.visible() then
                         cmp.select_next_item()
-                    else
+                    elseif has_words_before() then
                         cmp.complete()
+                    else
+                        fallback()
                     end
                 end,
                 ["<s-tab>"] = function(fallback)
