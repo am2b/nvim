@@ -61,7 +61,7 @@ return {
 
             --诊断信息相关
             --浮窗查看当前光标位置的诊断信息
-            --map("n", "<leader>e", vim.diagnostic.open_float, "Show diagnostics")
+            map("n", "<leader>e", vim.diagnostic.open_float, "Show diagnostics")
             --跳转到上/下一个报错或警告
             --map("n", "[d", vim.diagnostic.goto_prev, "Previous diagnostic")
             --map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
