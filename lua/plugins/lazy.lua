@@ -86,9 +86,6 @@ lazy.setup({
     --Telescope's purpose is to provide an interface to filter a list of items
     { import = 'plugins.telescope' },
 
-    --Session management
-    { import = 'plugins.persistence' },
-
     --nvim-lspconfig:用于简化语言服务器的配置
     { import = 'plugins.nvim-lspconfig' },
 
