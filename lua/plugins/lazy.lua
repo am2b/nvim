@@ -114,12 +114,6 @@ lazy.setup({
         import = 'plugins.dirbuf',
     },
 
-    --Automatically toggle between relative and absolute line numbers
-    {
-        'sitiom/nvim-numbertoggle',
-        event = { 'BufNewFile', 'BufReadPost' },
-    },
-
     --Auto remove search highlight and rehighlight when using n or N
     {
         'nvimdev/hlsearch.nvim',
@@ -140,4 +134,7 @@ lazy.setup({
 
     --Simple Neovim session manager
     { import = 'plugins.keep' },
+
+    --Automatically toggles Neovim line numbers
+    { import = 'plugins.smartnumber' },
 }, lazy.opts)
