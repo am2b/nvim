@@ -137,4 +137,7 @@ lazy.setup({
         --自动调用require('range-highlight').setup()
         opts = {},
     },
+
+    --Simple Neovim session manager
+    { import = 'plugins.keep' },
 }, lazy.opts)
