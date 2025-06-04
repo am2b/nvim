@@ -114,14 +114,6 @@ lazy.setup({
         import = 'plugins.dirbuf',
     },
 
-    --Auto remove search highlight and rehighlight when using n or N
-    {
-        'nvimdev/hlsearch.nvim',
-        --这个事件标志着neovim的启动工作已经基本完成,并且所有其他需要更早加载的插件(比如与编辑器核心功能直接相关的)已经加载完毕
-        event = { 'BufNewFile', 'BufReadPost' },
-        opts = {},
-    },
-
     --Hightlights ranges you have entered in commandline
     {
         'winston0410/range-highlight.nvim',
@@ -137,4 +129,7 @@ lazy.setup({
 
     --Automatically toggles Neovim line numbers
     { import = 'plugins.smartnumber' },
+
+    --Search Highlight Management
+    { import = 'plugins.stardust' },
 }, lazy.opts)
