@@ -8,6 +8,17 @@ vim.api.nvim_create_autocmd('FileType', {
     end
 })
 
+--强制设置统一的缩进样式
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "*",
+    callback = function()
+        vim.bo.tabstop = 4
+        vim.bo.shiftwidth = 4
+        vim.bo.softtabstop = 4
+        vim.bo.expandtab = true
+    end,
+})
+
 --自动保存
 local auto_save_excluded_types = { lua = true }
 vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {

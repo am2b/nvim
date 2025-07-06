@@ -54,6 +54,15 @@ return {
                 local ft = vim.bo.filetype
                 if formatters[ft] then
                     formatters[ft]()
+                elseif ft == "go" then
+                    -- 使用 gopls 格式化，然后 retab!
+                    vim.lsp.buf.format({ async = true })
+                    --延迟100ms,确保format执行完
+                    vim.defer_fn(function()
+                        --启用expandtab,retab!才会将tab替换为空格
+                        vim.bo.expandtab = true
+                        vim.cmd("retab!")
+                    end, 100)
                 else
                     vim.lsp.buf.format({ async = true })
                 end

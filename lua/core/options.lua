@@ -43,12 +43,16 @@ set.cursorline = true
 --set.cursorcolumn = true
 
 --indent
+--查看缩进相关设置的值:set tabstop? shiftwidth? softtabstop? expandtab?
+--查看谁修改了相关的设置:verbose set tabstop?
 --the amount of space on screen a tab character can occupy
 set.tabstop = 4
 --the amount of characters to indent a line.
 set.shiftwidth = 4
+set.softtabstop = 4
 --controls whether or not transform a tab character to spaces
 set.expandtab = true
+
 set.autoindent = true
 
 --fold
