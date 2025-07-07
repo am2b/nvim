@@ -6,6 +6,30 @@ local fmta = require("luasnip.extras.fmt").fmta
 return {
     s(
         {
+            trig = ";imp",
+            dscr = "import",
+            snippetType = "autosnippet",
+        },
+
+        fmta(
+            [[
+                import (
+                    "fmt"
+                    "os"
+                    "strings"
+                    "bufio"
+                    "log"
+                )
+
+                <>
+            ]],
+
+            { i(0) }
+        )
+    ),
+
+    s(
+        {
             trig = ";;",
             dscr = ":=",
             snippetType = "autosnippet",
