@@ -67,3 +67,6 @@ vim.keymap.set('n', '<space>nl',
         silent = true,
         desc = 'format a line of chinese comment'
     })
+
+--模拟ctrl + z来挂起nvim
+keymap.set("n", "<space>ff", "<c-z>", { desc = "Normal:ctrl + z" })
