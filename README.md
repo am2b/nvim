@@ -58,9 +58,6 @@ Snippet engine
 ### [hrsh7th/nvim-cmp](https://github.com/hrsh7th/nvim-cmp):<br>
 Complete
 
-### [nvim-focus/focus.nvim](https://github.com/nvim-focus/focus.nvim):<br>
-A full suite of window management enhancements
-
 ### [gbprod/yanky.nvim](https://github.com/gbprod/yanky.nvim):<br>
 Improved yank and put functionalities
 
