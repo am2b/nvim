@@ -46,9 +46,6 @@ Configurations and abstraction layer for neovim
 ### [nvim-telescope/telescope.nvim](https://github.com/nvim-telescope/telescope.nvim):<br>
 Telescope's purpose is to provide an interface to filter a list of items
 
-### [folke/persistence.nvim](https://github.com/folke/persistence.nvim):<br>
-Session management
-
 ### [neovim/nvim-lspconfig](https://github.com/neovim/nvim-lspconfig):<br>
 Quickstart configs for neovim LSP
 
@@ -64,11 +61,14 @@ Improved yank and put functionalities
 ### [elihunter173/dirbuf.nvim](https://github.com/elihunter173/dirbuf.nvim):<br>
 Lets you edit your filesystem like you edit text
 
-### [sitiom/nvim-numbertoggle](https://github.com/sitiom/nvim-numbertoggle):<br>
-Automatically toggle between relative and absolute line numbers
-
-### [nvimdev/hlsearch.nvim](https://github.com/nvimdev/hlsearch.nvim):<br>
-Auto remove search highlight and rehighlight when using n or N
-
 ### [winston0410/range-highlight.nvim](https://github.com/winston0410/range-highlight.nvim):<br>
 Hightlights ranges you have entered in commandline
+
+### [am2b/keep.nvim](https://github.com/am2b/keep.nvim):<br>
+Simple Neovim session manager
+
+### [am2b/smartnumber.nvim](https://github.com/am2b/smartnumber.nvim):<br>
+Automatically toggles Neovim line numbers
+
+### [am2b/stardust.nvim](https://github.com/am2b/stardust.nvim):<br>
+Search Highlight Management
