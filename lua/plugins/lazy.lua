@@ -102,9 +102,6 @@ lazy.setup({
     --cmp_luasnip
     { import = "plugins.nvim-cmp" },
 
-    --A full suite of window management enhancements
-    { import = 'plugins.focus' },
-
     --Improved yank and put functionalities
     { import = 'plugins.yanky' },
 
