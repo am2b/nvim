@@ -37,9 +37,6 @@ Shows git diff markers in the sign column and stages/previews/undoes hunks and p
 ### [akinsho/toggleterm.nvim](https://github.com/akinsho/toggleterm.nvim):<br>
 To persist and toggle multiple terminals during an editing session
 
-### [ThePrimeagen/harpoon](https://github.com/ThePrimeagen/harpoon):<br>
-Navigate between marked files
-
 ### [nvim-treesitter/nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter):<br>
 Configurations and abstraction layer for neovim
 

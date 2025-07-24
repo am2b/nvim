@@ -77,9 +77,6 @@ lazy.setup({
     --To persist and toggle multiple terminals during an editing session
     { import = 'plugins.toggleterm' },
 
-    --Navigate between marked files
-    { import = 'plugins.harpoon' },
-
     --Configurations and abstraction layer for neovim
     { import = 'plugins.nvim-treesitter' },
 
