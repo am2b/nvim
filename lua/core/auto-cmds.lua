@@ -61,4 +61,4 @@ vim.api.nvim_create_autocmd('InsertEnter', {
     end
 })
 
-require("core.gpg-yank")
+require("core.password-yank")
