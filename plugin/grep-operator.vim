@@ -1,6 +1,11 @@
+"依赖于对set grepprg的设置(已经设置了)
+
 "说明:
-"normal mode:<leader>gw:使用grep搜索一个单词
-"visual mode:<leader>g:使用grep搜索被选中的内容
+"normal mode:
+"<leader>giw:使用grep搜索一个word
+"visual mode:
+"<leader>g:使用grep搜索被选中的内容
+
 "<space>cc:关闭Quickfix List
 
 "First we set the operatorfunc option to our function, and then we run g@ which calls this function as an operator.
