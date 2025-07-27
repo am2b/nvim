@@ -103,6 +103,7 @@ set.signcolumn = "yes"
 --give this job to statusline
 set.showmode = false
 
+--结论:telescope可以完全替代:grep和grep-operator.vim
 --指定:grep命令背后实际调用的外部工具
 --:grep可以通过外部程序搜索,:vimgrep只能通过vim内部搜索(:vimgrep速度慢)
 -- --vimgrep:没这个参数,vim无法正确解析结果并放进quickfix
@@ -111,7 +112,7 @@ set.showmode = false
 --使用方法:
 --:grep pattern
 --<enter>
---(这一步已经可以自动实现了):copen,"打开quickfix
+--:copen,"打开quickfix
 --(j):cnext,"下一个匹配
 --(k):cprev,"上一个匹配
 --或通过grep-operator.vim:
@@ -120,15 +121,14 @@ set.showmode = false
 --visual mode:
 --<leader>g:使用grep搜索被选中的内容
 set.grepprg = "rg --vimgrep --follow --smart-case --hidden --glob '!**/.git/**'"
-
 --让:grep自动打开quickfix窗口(省略掉:copen)
-vim.api.nvim_create_autocmd("QuickFixCmdPost", {
-    pattern = { "[^l]*" },
-    callback = function()
-        --只在有结果时才开(copen会强制开空窗口)
-        vim.cmd("cwindow")
-    end,
-})
+--vim.api.nvim_create_autocmd("QuickFixCmdPost", {
+--    pattern = { "[^l]*" },
+--    callback = function()
+--        --只在有结果时才开(copen会强制开空窗口)
+--        vim.cmd("cwindow")
+--    end,
+--})
 
 --如果经常处理大文件的话，增加以下2个设置以提高性能
 set.lazyredraw = true
