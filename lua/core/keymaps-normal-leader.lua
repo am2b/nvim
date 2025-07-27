@@ -24,6 +24,9 @@ keymap.set("n", "<leader>u", "gUiwe", { desc = "Normal:Upper inside word" })
 --copy entire file
 keymap.set("n", "<leader>yf", "<cmd>%y<cr>", { desc = "Normal:Copy entire file" })
 
+--"0p(支持.)
+keymap.set("n", "<leader>p", "ciw<c-r>0<esc>", { desc = "Normal:Replace with register 0" })
+
 --jump list
 
 --local log = require("utils.log")
