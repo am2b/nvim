@@ -14,3 +14,6 @@ keymap.set("v", ">", ">gv", { desc = "Visual:Indent right" })
 --move lines
 keymap.set("v", "J", ":m '>+1<cr>gv=gv", { desc = "Visual:Move lines down" })
 keymap.set("v", "K", ":m '<-2<cr>gv=gv", { desc = "Visual:Move lines up" })
+
+--"0p
+keymap.set("v", "<leader>p", '"_c<C-r>0<Esc>', { desc = "Visual:Replace with register 0" })
