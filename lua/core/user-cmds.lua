@@ -151,23 +151,10 @@ vim.api.nvim_create_user_command('MySortImports', function(opts)
     end
 end, {})
 
---vim.api.nvim_echo(chunks, history, opts)
---参数:
---chunks(列表):包含要显示的消息片段,每个片段由一对组成:
---文本内容(字符串):要显示的具体消息内容
---高亮组(字符串):Neovim中定义的高亮组名称,用于控制消息的颜色样式,如果不需要高亮,使用空字符串""
+--删除全部的缓冲区,但是除了当前缓冲区
+vim.api.nvim_create_user_command("MyDeleteOtherBuffers", [[
+    let cur = bufnr('%') | silent! execute 'bufdo if bufnr("%") != '.cur.' | bdelete! | endif'
+]], {})
 
---history(布尔值):是否将消息存入消息历史中
---true:将消息加入历史(可以通过:messages查看)
---false:不加入历史,仅短暂显示
-
---opts(表):目前是保留参数,通常传入空表{}
-
---高亮组(HighlightGroups)是Neovim中的颜色样式,用户可以通过:highlight命令查看和自定义,以下是常用的高亮组:
---ErrorMsg:通常为红色,用于错误提示
---WarningMsg:通常为黄色,用于警告
---String:通常为绿色,用于字符串
---None:默认颜色,无高亮
-
---你可以自定义这些高亮组的颜色,例如:
---highlight ErrorMsg guifg=#ff0000 guibg=#000000 gui=bold
+--删除全部的缓冲区
+vim.api.nvim_create_user_command("MyDeleteAllBuffers", "bufdo bd", {})

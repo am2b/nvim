@@ -1,20 +1,7 @@
 local keymap = vim.keymap
 
---delete all buffers except the current buffer
---the %bdelete command deletes all buffers.
---the % represents from 1 up to the highest value.
---the # in this context represents the alternate filename.
---the alternate file is the last buffer you were viewing before they all closed.
-keymap.set("n", "<space>bd", "<cmd>%bdelete! | edit # | normal `.<cr>",
-    { desc = "Normal:Delete all buffers except the current buffer" })
-
 --delete current buffer
-keymap.set("n", "<space>dd", "<cmd>bdelete<cr>",
-    { desc = "Normal:Delete current buffer" })
-
---delete all buffers
-keymap.set("n", "<space>da", "<cmd>bufdo bd<cr>",
-    { desc = "Normal:Delete all buffers" })
+keymap.set("n", "<space>dd", "<cmd>bdelete<cr>", { desc = "Normal:Delete current buffer" })
 
 --reload lua snippets
 keymap.set("n", "<space>rs",
