@@ -54,14 +54,6 @@ keymap.set("n", "gJ", 'ylr<cr>i<c-r>"<esc>', { desc = "Normal:Break line" })
 keymap.set("n", "n", "nzz", { desc = "Normal:Put cursor at center of window when search" })
 keymap.set("n", "N", "Nzz", { desc = "Normal:Put cursor at center of window when search" })
 
---stop the highlighting after search
---keymap.set("n", "<esc>", "<cmd>nohlsearch<cr>", { desc = "Normal:Stop the highlighting after search" })
-
---normal,visual mode
---enter
---keymap.set({ "n", "v" }, "<cr>", ":", { desc = "Normal-Visual:Enter command mode" })
---keymap.set({ "n", "v" }, "\\", "<cr>", { desc = "Normal-Visual:Use \\ as original Enter" })
-
 --keybindings:
 --vim.keymap.set can use a lua function as the action:
 --vim.keymap.set('n', 'Q', function()
