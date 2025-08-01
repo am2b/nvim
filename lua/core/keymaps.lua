@@ -45,7 +45,8 @@ keymap.set("n", "<up>", "O<esc>j", { desc = "Normal:Add space line before the cu
 keymap.set("n", "<down>", "o<esc>k", { desc = "Normal:Add space line after the current line" })
 
 --break line
-keymap.set("n", "gJ", 'ylr<cr>i<c-r>"<esc>', { desc = "Normal:Break line" })
+--keymap.set("n", "gJ", 'ylr<cr>i<c-r>"<esc>', { desc = "Normal:Break line" })
+keymap.set("n", "gJ", "Do<esc>p", { desc = "Normal:Break line" })
 
 --search with the 'very magic' mode
 --keymap.set("n", "/", "/\\v", { desc = "Normal:Search with the very magic mode" })
@@ -53,6 +54,9 @@ keymap.set("n", "gJ", 'ylr<cr>i<c-r>"<esc>', { desc = "Normal:Break line" })
 
 keymap.set("n", "n", "nzz", { desc = "Normal:Put cursor at center of window when search" })
 keymap.set("n", "N", "Nzz", { desc = "Normal:Put cursor at center of window when search" })
+
+--微调zz,<c-e>:将光标所在行向上移动一行,<c-y>:将光标所在行向下移动一行(光标跟着移动)
+keymap.set("n", "zz", "zt5<c-y>", { desc = "Normal:Fine-tuning the zz command" })
 
 --keybindings:
 --vim.keymap.set can use a lua function as the action:
