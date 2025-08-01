@@ -46,7 +46,7 @@ return {
             --map("n", "<C-k>", vim.lsp.buf.signature_help, "Signature help")
 
             --重命名变量
-            --map("n", "<leader>rn", vim.lsp.buf.rename, "Rename symbol")
+            map("n", "<leader>rn", vim.lsp.buf.rename, "Rename symbol")
             --显示代码动作(如快速修复)
             --map("n", "<leader>ca", vim.lsp.buf.code_action, "Code action")
             --格式化
@@ -72,9 +72,8 @@ return {
             --浮窗查看当前光标位置的诊断信息
             map("n", "<leader>e", vim.diagnostic.open_float, "Show diagnostics")
             --跳转到上/下一个报错或警告
-            --map("n", "[d", vim.diagnostic.goto_prev, "Previous diagnostic")
-            --map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
-            --end on_attach
+            map("n", "[d", vim.diagnostic.goto_prev, "Previous diagnostic")
+            map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
         end
 
         --capabilities告诉LSP:neovim客户端都支持什么功能
