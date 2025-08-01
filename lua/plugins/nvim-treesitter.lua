@@ -75,19 +75,19 @@ return {
                     set_jumps = true,
                     goto_next_start = {
                         --跳转到下一个函数的开头
-                        ["[b"] = "@function.outer",
+                        ["]b"] = "@function.outer",
                     },
                     goto_next_end = {
                         --跳转到下一个函数的结尾
-                        ["[e"] = "@function.outer",
+                        ["]e"] = "@function.outer",
                     },
                     goto_previous_start = {
                         --跳转到上一个函数的开头
-                        ["]b"] = "@function.outer",
+                        ["[b"] = "@function.outer",
                     },
                     goto_previous_end = {
                         --跳转到上一个函数的结尾
-                        ["]e"] = "@function.outer",
+                        ["[e"] = "@function.outer",
                     },
                 },
             },
