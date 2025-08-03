@@ -99,7 +99,7 @@ return {
             { desc = "Telescope:find string under cursor or selection" })
 
         --search symbols(类名,函数名,变量等)
-        vim.keymap.set('n', '<leader>ff', require('telescope.builtin').lsp_document_symbols, { desc = 'Telescope: document symbols' })
+        vim.keymap.set('n', '<leader>ff', builtin.lsp_document_symbols, { desc = 'Telescope:find document symbols' })
 
         --vim pickers
         --list buffers
