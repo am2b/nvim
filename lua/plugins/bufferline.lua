@@ -11,16 +11,16 @@ return {
 
     opts = {
         options = {
+            --显示buffers而不是tabs
+            mode = "buffers",
             --显示buffer ID
             numbers = "buffer_id",
-            --显示活动buffer的指示器
-            indicator = { icon = '▎', style = 'icon' },
             --如果安装了nvim-web-devicons,显示buffer图标
             show_buffer_icons = true,
             --显示tab指示器
             show_tab_indicators = true,
             --设置分隔符风格
-            separator_style = "slant",
+            --separator_style = "slant",
         },
     },
 

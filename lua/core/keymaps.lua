@@ -25,7 +25,7 @@ keymap.set({ "n", "x" }, "s", "<nop>")
 vim.g.mapleader = "s"
 
 keymap.set({ "n", "x" }, ",", "<nop>")
---local leader key
+--local leader key(用于在特定的filetype中做映射)
 vim.g.maplocalleader = ","
 
 --normal mode
@@ -45,6 +45,7 @@ keymap.set("n", "<up>", "O<esc>j", { desc = "Normal:Add space line before the cu
 keymap.set("n", "<down>", "o<esc>k", { desc = "Normal:Add space line after the current line" })
 
 --break line
+--gJ原本的行为:合并行,不添加空格(J:合并行并添加一个空格)
 --keymap.set("n", "gJ", 'ylr<cr>i<c-r>"<esc>', { desc = "Normal:Break line" })
 keymap.set("n", "gJ", "Do<esc>p", { desc = "Normal:Break line" })
 
