@@ -120,7 +120,7 @@ return {
         --lists manpage entries
         vim.keymap.set('n', '<leader>fa', builtin.man_pages, { desc = "Telescope:list manpage entries" })
 
-        --list jumplist(可以通过telescope来查看jump list，就可以把normal模式下的<c-o>和<c-i>重新映射另作他用
+        --list jumplist
         vim.keymap.set('n', '<leader>fj', builtin.jumplist, { desc = "Telescope:list jumplist" })
 
         --lists items in the quickfix list
