@@ -26,6 +26,7 @@ return {
             trig = ";one",
             dscr = "template:password:one",
             snippetType = "autosnippet",
+            ft = "one",
         },
 
         fmta(
