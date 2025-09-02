@@ -32,6 +32,7 @@ vim.g.maplocalleader = ","
 --c-u, c-f:pageup and pagedown
 keymap.set("n", "<c-u>", "<pageup>", { desc = "Normal:Page up" })
 
+--same as ctrl + ^(6)
 keymap.set("n", "<bs>", "<cmd>b#<cr>", { desc = "Normal:Switch between buffers" })
 
 --resize window
