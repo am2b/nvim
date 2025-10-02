@@ -6,8 +6,6 @@ return {
     event = { "BufReadPre", "BufNewFile" },
 
     config = function()
-        local lspconfig = require("lspconfig")
-
         local nvim_script_path = vim.fn.stdpath("config") .. "/scripts/"
         local formatters = {}
         formatters.javascript = function() vim.cmd("!" .. nvim_script_path .. "format_prettier.sh %") end
@@ -98,7 +96,7 @@ return {
                 },
             },
             pyright = {},
-            ts_ls = {},
+            tsserver = {},
             gopls = {},
         }
 
@@ -107,7 +105,7 @@ return {
         for name, opts in pairs(servers) do
             opts.capabilities = capabilities
             opts.on_attach = on_attach
-            lspconfig[name].setup(opts)
+            vim.lsp.config(name, opts)
         end
     end,
 }
