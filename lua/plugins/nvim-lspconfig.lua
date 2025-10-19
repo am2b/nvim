@@ -7,19 +7,45 @@ return {
 
     config = function()
         local nvim_script_path = vim.fn.stdpath("config") .. "/scripts/"
+
+        --异步执行外部命令,防止分页,阻塞
+        local function async_sh(cmd, opts)
+            opts = opts or {}
+            vim.fn.jobstart(cmd, {
+                on_exit = function(_, code)
+                    if code == 0 then
+                        if not opts.silent then
+                            vim.notify("✅ 格式化完成", vim.log.levels.INFO)
+                        end
+                        --可选:自动刷新buffer,确保格式化后的文件立即更新
+                        vim.cmd("checktime")
+                    else
+                        vim.notify("❌ 格式化失败:" .. table.concat(cmd, " "), vim.log.levels.ERROR)
+                    end
+                end,
+            })
+        end
+
         local formatters = {}
-        formatters.javascript = function() vim.cmd("!" .. nvim_script_path .. "format_prettier.sh %") end
-        formatters.typescript = formatters.javascript
-        --.jsx
-        formatters.javascriptreact = formatters.javascript
-        --.tsx
-        formatters.typescriptreact = formatters.javascript
-        formatters.html = formatters.javascript
-        formatters.css = formatters.javascript
-        formatters.json = formatters.javascript
-        formatters.yaml = formatters.javascript
-        formatters.markdown = formatters.javascript
-        formatters.python = function() vim.cmd("!" .. nvim_script_path .. "format_python.sh %") end
+        formatters.sh = function()
+            async_sh({ "shfmt", "-i", "4", "-ci", "-sr", "-w", vim.fn.expand("%") })
+        end
+        formatters.bash = formatters.sh
+        local prettier_fmt = function()
+            async_sh({ nvim_script_path .. "format_prettier.sh", vim.fn.expand("%") })
+        end
+        formatters.javascript = prettier_fmt
+        formatters.typescript = prettier_fmt
+        formatters.javascriptreact = prettier_fmt
+        formatters.typescriptreact = prettier_fmt
+        formatters.html = prettier_fmt
+        formatters.css = prettier_fmt
+        formatters.json = prettier_fmt
+        formatters.yaml = prettier_fmt
+        formatters.markdown = prettier_fmt
+        formatters.python = function()
+            async_sh({ nvim_script_path .. "format_python.sh", vim.fn.expand("%") })
+        end
 
         --自动attach的回调函数:配置快捷键和功能增强
         --会在某个LSP server成功连接到buffer时被调用
@@ -51,6 +77,7 @@ return {
             map("n", "<space>fm", function()
                 local ft = vim.bo.filetype
                 if formatters[ft] then
+                    --使用外部格式化器(异步)
                     formatters[ft]()
                 elseif ft == "go" then
                     -- 使用 gopls 格式化，然后 retab!
@@ -62,9 +89,10 @@ return {
                         vim.cmd("retab!")
                     end, 100)
                 else
+                    --使用默认的LSP格式化
                     vim.lsp.buf.format({ async = true })
                 end
-            end, "Format")
+            end, "Format buffer")
 
             --诊断信息相关
             --浮窗查看当前光标位置的诊断信息
@@ -100,12 +128,11 @@ return {
             gopls = {},
         }
 
-        --初始化语言服务器
-        --对于bashls = {},name是bashls,opts是{}
         for name, opts in pairs(servers) do
             opts.capabilities = capabilities
             opts.on_attach = on_attach
-            vim.lsp.enable(name, opts)
+            vim.lsp.config[name] = opts
+            vim.lsp.enable(name)
         end
     end,
 }
