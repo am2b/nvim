@@ -96,7 +96,7 @@ return {
                 },
             },
             pyright = {},
-            tsserver = {},
+            ts_ls = {},
             gopls = {},
         }
 
@@ -105,7 +105,7 @@ return {
         for name, opts in pairs(servers) do
             opts.capabilities = capabilities
             opts.on_attach = on_attach
-            vim.lsp.config(name, opts)
+            vim.lsp.enable(name, opts)
         end
     end,
 }
