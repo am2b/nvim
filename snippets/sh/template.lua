@@ -44,6 +44,22 @@ check_dependent_tools() {
     fi
 }
 
+check_envs() {
+    if (("$#" == 0)); then
+        return 0
+    fi
+
+    for var in "$@"; do
+        #如果变量未导出或值为空
+        if [ -z "$(printenv "$var" 2>> /dev/null)" ]; then
+            echo "error:this script uses unexported environment variables:${var}"
+            return 1
+        fi
+    done
+
+    return 0
+}
+
 check_parameters() {
     if (("$#" <>)); then
         usage
@@ -67,6 +83,8 @@ process_opts() {
 main() {
     REQUIRED_TOOLS=(<>)
     check_dependent_tools "${REQUIRED_TOOLS[@]}"
+    REQUIRED_ENVS=(<>)
+    check_envs "${REQUIRED_ENVS[@]}" || exit 1
     check_parameters "${@}"
     OPTIND=1
     process_opts "${@}"
@@ -75,7 +93,7 @@ main() {
 
 main "${@}"
         ]],
-            { i(1), i(2), i(3), i(0) }
+            { i(1), i(2), i(3), i(4), i(0) }
         ),
 
         { condition = is_first_line }
