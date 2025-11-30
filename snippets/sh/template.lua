@@ -68,7 +68,7 @@ check_parameters() {
 
 process_opts() {
     while getopts ":h" opt; do
-        case $opt in
+        case "$opt" in
         h)
             usage 0
             ;;
@@ -85,10 +85,9 @@ main() {
     check_dependent_tools "${REQUIRED_TOOLS[@]}"
     REQUIRED_ENVS=(<>)
     check_envs "${REQUIRED_ENVS[@]}" || exit 1
-    check_parameters "${@}"
-    OPTIND=1
     process_opts "${@}"
     shift $((OPTIND - 1))<>
+    check_parameters "${@}"
 }
 
 main "${@}"
