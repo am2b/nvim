@@ -28,5 +28,39 @@ return {
         ),
 
         { condition = is_first_line }
-    )
+    ),
+    s(
+        {
+            trig = ";uv",
+            dscr = "#!/usr/bin/env uv run",
+            snippetType = "autosnippet",
+        },
+
+        fmta(
+            [[
+                #!/usr/bin/env uv run
+                # /// script
+                # requires-python = ">>=3.12"
+                # dependencies = [
+                # ]
+                # ///
+
+                #=<>
+                #$<>
+                #@usage:
+                #@<>
+
+                import sys
+
+                def main() ->> int:
+                    <>
+                    return 0
+
+                if __name__ == "__main__":
+                    sys.exit(main())
+            ]],
+
+            {i(1),i(2),i(3),i(0)}
+        )
+    ),
 }
