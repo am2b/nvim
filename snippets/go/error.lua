@@ -23,4 +23,61 @@ return {
             { i(1), i(0) }
         )
     ),
+    s(
+        {
+            trig = ";we",
+            dscr = "wrap error",
+            snippetType = "autosnippet",
+        },
+
+        fmta(
+            [[
+                if err != nil {
+                    return errorx.Wrap(<>, err)
+                }
+
+                <>
+            ]],
+
+            { i(1), i(0) }
+        )
+    ),
+    s(
+        {
+            trig = ";ne",
+            dscr = "new error",
+            snippetType = "autosnippet",
+        },
+
+        fmta(
+            [[
+                if <> {
+                    return errorx.New(<>)
+                }
+
+                <>
+            ]],
+
+            { i(1), i(2), i(0) }
+        )
+    ),
+    s(
+        {
+            trig = ";re",
+            dscr = "return error",
+            snippetType = "autosnippet",
+        },
+
+        fmta(
+            [[
+                if err != nil {
+                    return err
+                }
+
+                <>
+            ]],
+
+            { i(0) }
+        )
+    ),
 }
