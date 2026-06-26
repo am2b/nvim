@@ -2,8 +2,9 @@
 
 return {
     'L3MON4D3/LuaSnip',
+    --没有使用:regTrig = true
     --安装javascript正则表达式支持,增强匹配能力
-    build = 'make install_jsregexp',
+    --build = 'make install_jsregexp',
 
     event = { 'InsertEnter' },
 

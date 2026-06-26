@@ -39,23 +39,24 @@ return {
         )
     ),
 
-    s(
-        {
-            --can not be trigged at the very beginning of the line
-            trig = "([^%a])tt",
-            regTrig = true,
-            wordTrig = false,
-            snippetType = "autosnippet",
-        },
+    --s(
+    --    {
+    --        --需要:build = 'make install_jsregexp',
+    --        --can not be trigged at the very beginning of the line
+    --        trig = "([^%a])tt",
+    --        regTrig = true,
+    --        wordTrig = false,
+    --        snippetType = "autosnippet",
+    --    },
 
-        fmta(
-            "<>^",
-            {
-                --function node:return first capture group
-                f(function(_, snip) return snip.captures[1] end),
-            }
-        )
-    ),
+    --    fmta(
+    --        "<>^",
+    --        {
+    --            --function node:return first capture group
+    --            f(function(_, snip) return snip.captures[1] end),
+    --        }
+    --    )
+    --),
 
     s(
         {
