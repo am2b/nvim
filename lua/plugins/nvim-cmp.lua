@@ -3,7 +3,7 @@
 return {
     --hrsh7th/nvim-cmp:自动补全框架的主插件
     "hrsh7th/nvim-cmp",
-    event = "InsertEnter",
+    event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
         --下面这些插件提供了cmp的补全来源
         --从LSP获取补全内容
@@ -28,19 +28,27 @@ return {
         --判断光标前是否有非空字符
         local has_words_before = function()
             local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-            return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+            if col == 0 then
+                return false
+            end
+
+            local text = vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]
+            return text:sub(col, col):match("%s") == nil
         end
 
+        --insert mode
         cmp.setup({
             completion = {
                 --关闭自动弹出
                 autocomplete = false,
             },
-            mapping = {
+            mapping = cmp.mapping.preset.insert({
                 --将<tab>映射为:如果菜单未打开,则触发cmp.complete()显示菜单,否则跳转或选中
                 ["<tab>"] = function(fallback)
                     if cmp.visible() then
                         cmp.select_next_item()
+                    elseif luasnip.expand_or_jumpable() then
+                        luasnip.expand_or_jump()
                     elseif has_words_before() then
                         cmp.complete()
                     else
@@ -50,19 +58,25 @@ return {
                 ["<s-tab>"] = function(fallback)
                     if cmp.visible() then
                         cmp.select_prev_item()
+                    elseif luasnip.jumpable(-1) then
+                        luasnip.jump(-1)
                     else
                         fallback()
                     end
                 end,
                 --select = true表示如果你没有手动选择,那么就默认选择第一个
-                ["<cr>"] = require("cmp").mapping.confirm({ select = true }),
-            },
+                --["<cr>"] = cmp.mapping.confirm({ select = true }),
+                ["<cr>"] = cmp.mapping.confirm({
+                    behavior = cmp.ConfirmBehavior.Replace,
+                    select = true,
+                }),
+            }),
 
             --告诉cmp:补全项里如果包含snippet(例如Python中的for自动生成循环),就交给LuaSnip展开
             snippet = {
                 expand = function(args)
                     --args.body是snippet的实际内容(如"for i in range(...):")
-                    require("luasnip").lsp_expand(args.body)
+                    luasnip.lsp_expand(args.body)
                 end,
             },
 
@@ -81,6 +95,7 @@ return {
                         buffer = "[Buffer]",
                         luasnip = "[Snippet]",
                         path = "[Path]",
+                        cmdline = "[Cmd]",
                     }
                     --设置补全菜单中每一项右边显示的标签(比如[LSP]等)
                     --vim_item.menu是nvim-cmp中每条补全项的右侧显示来源的标签
@@ -90,6 +105,25 @@ return {
                     return vim_item
                 end,
             },
+        })
+
+        --cmdline mode
+        --搜索
+        cmp.setup.cmdline({ "/", "?" }, {
+            mapping = cmp.mapping.preset.cmdline(),
+            sources = {
+                { name = "buffer" },
+            },
+        })
+        --命令
+        cmp.setup.cmdline(":", {
+            mapping = cmp.mapping.preset.cmdline(),
+            --nvim-cmp支持primary source,secondary source即:第一组优先,第二组其次
+            sources = cmp.config.sources({
+                { name = "path" },
+            }, {
+                { name = "cmdline" },
+            }),
         })
     end,
 }
