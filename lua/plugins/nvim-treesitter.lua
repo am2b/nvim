@@ -14,6 +14,7 @@
 
 return {
     'nvim-treesitter/nvim-treesitter',
+    --告诉lazy.nvim:每次安装或更新nvim-treesitter插件后,自动执行:TSUpdate,从而自动安装或更新parser
     build = ":TSUpdate",
 
     dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects', 'RRethy/nvim-treesitter-textsubjects' },
@@ -25,7 +26,29 @@ return {
 
         configs.setup({
             --by default, everything is disabled
-            ensure_installed = { "bash", "c", "diff", "go", "json", "lua", "perl", "python", "ruby", "swift", "tmux", "toml", "vim", "yaml" },
+            ensure_installed = {
+                "bash",
+                "c",
+                "diff",
+                "go",
+                "json",
+                "lua",
+                "perl",
+                "python",
+                "ruby",
+                "swift",
+                "tmux",
+                "toml",
+                "vim",
+                "yaml",
+                "javascript",
+                "typescript",
+                "tsx",
+                "html",
+                "css",
+                "markdown",
+                "markdown_inline",
+            },
 
             highlight = {
                 --启用语法高亮
