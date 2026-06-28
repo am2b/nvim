@@ -1,1 +1,1 @@
-require("tools.im-select")
+require("tools.input-method")
