@@ -1,5 +1,17 @@
-local english_input = "com.apple.keylayout.ABC"
-local chinese_input = "com.apple.inputmethod.SCIM.Shuangpin"
+local sys = vim.loop.os_uname().sysname
+local is_mac = sys == "Darwin"
+local is_linux = sys == "Linux"
+
+local english_input
+local chinese_input
+
+if is_mac then
+    english_input = "com.apple.keylayout.ABC"
+    chinese_input = "com.apple.inputmethod.SCIM.Shuangpin"
+else
+    english_input = "keyboard-us"
+    chinese_input = "shuangpin"
+end
 
 --手动开关:
 --打开:则进入插入模式和命令模式时自动切换到中文输入法
@@ -16,7 +28,16 @@ vim.api.nvim_create_user_command("MyChineseDisable", function()
 end, {})
 
 local function set_input_method(id)
-    os.execute("im-select " .. id)
+    if is_mac then
+        if vim.fn.executable("im-select") == 1 then
+            --os.execute("im-select " .. id)
+            vim.system({ "im-select", id })
+        end
+    elseif is_linux then
+        if vim.fn.executable("fcitx5-remote") == 1 then
+            vim.system({ "fcitx5-remote", "-s", id })
+        end
+    end
 end
 
 --进入insert mode模式时,如果打开了开关,则切换为中文输入法
