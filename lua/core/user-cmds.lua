@@ -4,14 +4,67 @@
 --replaced by plugin:yanky.nvim
 --vim.cmd[[au TextYankPost * silent! lua vim.highlight.on_yank {timeout=500,on_visual=false}]]
 
+local nvim_config_path = vim.fn.stdpath("config")
+
+--校验shell脚本是否可读,具备可执行权限
+local function check_shell_script_valid(script_path)
+    --判断文件是否存在且可读
+    if not vim.fn.filereadable(script_path) then
+        vim.notify(string.format("脚本不存在或不可读:%s", script_path), vim.log.levels.ERROR)
+        return false
+    end
+
+    --判断文件是否拥有可执行权限
+    --getfperm返回格式示例:rwxr-xr-x,最后一位是当前用户执行位
+    local file_perm = vim.fn.getfperm(script_path)
+    if file_perm:sub(-1) ~= "x" then
+        vim.notify(
+            string.format("脚本无执行权限,请执行:chmod +x %s", script_path),
+            vim.log.levels.WARN
+        )
+        return false
+    end
+
+    return true
+end
+
 vim.api.nvim_create_user_command("MyReloadConfig", "source $MYVIMRC", { desc = "reload neovim configuration" })
 
 vim.api.nvim_create_user_command('MyReplaceMarks', function()
     local file_name = vim.fn.expand('%')
+    local script = nvim_config_path .. "/scripts/text_replace_chinese_punctuation_marks.sh"
+
+    --防止未打开文件
+    if file_name == "" then
+        vim.notify("当前未打开任何文件", vim.log.levels.ERROR)
+        return
+    end
+
+    if not check_shell_script_valid(script) then
+        return
+    end
+
+    --校验脚本文件是否存在
+    if not vim.fn.filereadable(script) then
+        vim.notify("脚本不存在:" .. script, vim.log.levels.ERROR)
+        return
+    end
+    --校验脚本是否拥有可执行权限
+    if vim.fn.getfperm(script):sub(-1) ~= "x" then
+        vim.notify("脚本无执行权限,请执行:chmod +x " .. script, vim.log.levels.WARN)
+        return
+    end
+
     vim.cmd('w')
-    vim.cmd('!text_replace_chinese_punctuation_marks.sh ' .. file_name)
+    --调用配置目录下的脚本绝对路径
+    --vim.fn.shellescape():对脚本路径,文件路径做shell转义,防止路径包含空格,特殊符号时命令执行报错
+    vim.cmd('!' .. vim.fn.shellescape(script) .. ' ' .. vim.fn.shellescape(file_name))
     --重新加载文件
-    vim.cmd('e ' .. file_name)
+    --vim.fn.fnameescape():对文件路径字符串进行vim路径安全转义,专门用于vim.cmd(),vim内置命令场景,避免路径包含空格,中文,括号,#,$,&等特殊字符时命令执行失败
+    vim.cmd('e ' .. vim.fn.fnameescape(file_name))
+    --vim.cmd('!text_replace_chinese_punctuation_marks.sh ' .. file_name)
+    --重新加载文件
+    --vim.cmd('e ' .. file_name)
 end, { nargs = 0, desc = 'replace chinese punctuation marks' }
 )
 
@@ -99,7 +152,6 @@ vim.api.nvim_create_user_command('MyInsertDateTime', function()
 end, { desc = 'insert date and time' })
 
 vim.api.nvim_create_user_command('MyInsertPass', function(opts)
-    local nvim_config_path = vim.fn.stdpath("config")
     local script = nvim_config_path .. "/scripts/generate_password.sh"
     --当nargs为"?"时opts.args是可选参数,那么没有传递参数时opts.args的值默认为空字符串,而空字符串在lua里面被认为是true
     local len = opts.args ~= "" and opts.args or "64"
@@ -124,16 +176,34 @@ end, { nargs = "?", desc = 'insert password' })
 
 --totp:
 vim.api.nvim_create_user_command("MyTotp", function()
-    local line = vim.api.nvim_get_current_line()
+    local script = nvim_config_path .. "/scripts/totp.sh"
 
-    local handle = io.popen(string.format("bash totp.sh '%s'", line))
+    if not check_shell_script_valid(script) then
+        return
+    end
+
+    local line = vim.api.nvim_get_current_line()
+    local trim_line = vim.trim(line)
+    if trim_line == "" then
+        vim.notify("当前行内容为空,无法执行TOTP生成", vim.log.levels.ERROR)
+        return
+    end
+
+    local safe_line = vim.fn.shellescape(trim_line)
+    local handle = io.popen(string.format("bash %s %s", vim.fn.shellescape(script), safe_line))
     if handle then
         local result = handle:read("*a")
         handle:close()
         result = vim.trim(result)
-        --copy to clipboard
+        if result == "" then
+            vim.notify("TOTP脚本执行未返回有效结果", vim.log.levels.WARN)
+            return
+        end
+        --复制到系统剪贴板
         vim.fn.setreg("+", result)
         vim.api.nvim_echo({ { "TOTP: " .. result .. " (copied)", "String" } }, false, {})
+    else
+        vim.notify("调用totp.sh脚本失败", vim.log.levels.ERROR)
     end
 end, {})
 
@@ -141,8 +211,6 @@ vim.api.nvim_create_user_command('MySortImports', function(opts)
     --获取当前文件的绝对路径
     local file_path = vim.fn.expand('%:p')
     if vim.bo.filetype == 'python' then
-        --获取neovim配置目录并构建脚本路径
-        local nvim_config_path = vim.fn.stdpath('config')
         local script_path = nvim_config_path .. '/scripts/python_sort_imports.sh'
         --执行bash脚本,并传递当前python文件路径
         vim.fn.system('bash ' .. script_path .. ' ' .. file_path)
