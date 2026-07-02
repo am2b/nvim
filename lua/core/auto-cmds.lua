@@ -42,7 +42,7 @@ vim.api.nvim_create_autocmd('FileType', {
 --stop automatic newline continuation of comments
 vim.api.nvim_create_autocmd('FileType', {
     group = augroup_user,
-    pattern = { 'lua', 'python', 'perl', 'c', 'cpp', 'sh', 'awk', 'zsh', 'rust' },
+    pattern = { 'lua', 'python', 'perl', 'c', 'cpp', 'sh', 'awk', 'zsh' },
     --pattern = "*",
     callback = function()
         vim.opt_local.formatoptions:remove({ 'r', 'o', })
