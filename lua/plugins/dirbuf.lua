@@ -19,7 +19,8 @@ return {
     cmd = { "Dirbuf" },
 
     opts = {
-        write_cmd = "DirbufSync -confirm",
+        --write_cmd = "DirbufSync -confirm",
+        write_cmd = "DirbufSync",
     },
 
     --config = function()
