@@ -5,7 +5,6 @@ return {
     'nvim-telescope/telescope.nvim',
 
     dependencies = {
-        'nvim-treesitter/nvim-treesitter',
         'nvim-lua/plenary.nvim',
         'nvim-tree/nvim-web-devicons',
         --to get fzf-native working,you need to build it with either cmake or make

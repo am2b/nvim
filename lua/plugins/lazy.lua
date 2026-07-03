@@ -47,7 +47,7 @@ function lazy.setup(plugins, opts)
 end
 
 lazy.setup({
-    --A clean,dark neovim theme written in Lua,with support for lsp,treesitter and lots of plugins
+    --A clean,dark neovim theme written in Lua
     { 'folke/tokyonight.nvim' },
 
     --A dependency library for many plugins
@@ -82,9 +82,6 @@ lazy.setup({
 
     --To persist and toggle multiple terminals during an editing session
     { import = 'plugins.toggleterm' },
-
-    --Configurations and abstraction layer for neovim
-    { import = 'plugins.nvim-treesitter' },
 
     --Telescope's purpose is to provide an interface to filter a list of items
     { import = 'plugins.telescope' },

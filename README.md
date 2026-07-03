@@ -2,7 +2,7 @@
 A modern plugin manager for neovim
 
 ### [folke/tokyonight.nvim](https://github.com/folke/tokyonight.nvim):<br>
-A clean,dark neovim theme written in Lua,with support for lsp,treesitter and lots of plugins
+A clean,dark neovim theme written in Lua
 
 ### [nvim-lua/plenary.nvim](https://github.com/nvim-lua/plenary.nvim):<br>
 A dependency library for many plugins
@@ -36,9 +36,6 @@ Shows git diff markers in the sign column and stages/previews/undoes hunks and p
 
 ### [akinsho/toggleterm.nvim](https://github.com/akinsho/toggleterm.nvim):<br>
 To persist and toggle multiple terminals during an editing session
-
-### [nvim-treesitter/nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter):<br>
-Configurations and abstraction layer for neovim
 
 ### [nvim-telescope/telescope.nvim](https://github.com/nvim-telescope/telescope.nvim):<br>
 Telescope's purpose is to provide an interface to filter a list of items
