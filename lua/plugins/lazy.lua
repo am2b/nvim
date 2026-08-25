@@ -4,22 +4,21 @@
 
 local lazy = {}
 
---设置插件路径，允许用户自定义路径
---插件路径可配置，通过vim.g.lazy_path自定义插件路径
+--设置插件路径,允许用户自定义路径
+--插件路径可配置,通过vim.g.lazy_path自定义插件路径
 lazy.path = vim.g.lazy_path or vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+
 --初始化默认配置
---提供默认配置，允许用户传入opts自定义配置
+--提供默认配置,允许用户传入opts自定义配置
 lazy.opts = {}
 
---安装函数，使用vim.fn.isdirectory简化路径检查
+--安装函数,使用vim.fn.isdirectory简化路径检查
 function lazy.install(path)
     --vim.fn.isdirectory替代vim.loop.fs_stat简化目录检查
     if vim.fn.isdirectory(path) == 0 then
         vim.notify("正在安装lazy.nvim,请稍候...", vim.log.levels.INFO)
         vim.fn.system({
-            'git',
-            'clone',
-            '--filter=blob:none',
+            'git', 'clone', '--filter=blob:none',
             'https://github.com/folke/lazy.nvim.git',
             '--branch=stable',
             path,
@@ -28,6 +27,7 @@ function lazy.install(path)
         if vim.v.shell_error == 0 then
             vim.notify("Lazy.nvim 安装完成!", vim.log.levels.INFO)
         else
+            vim.fn.delete(path, 'rf')
             vim.notify("Lazy.nvim 安装失败,请检查网络", vim.log.levels.ERROR)
         end
     end
@@ -47,8 +47,9 @@ function lazy.setup(plugins, opts)
 end
 
 lazy.setup({
+    --{ import = 'plugins.xxx' }:lazy.nvim启动时会加载对应的文件:lua/plugins/xxx.lua
     --A clean,dark neovim theme written in Lua
-    { 'folke/tokyonight.nvim' },
+    { import = 'plugins.tokyonight' },
 
     --A dependency library for many plugins
     { 'nvim-lua/plenary.nvim',            lazy = true },
@@ -100,7 +101,7 @@ lazy.setup({
     --cmp-cmdline
     --cmp-path
     --cmp_luasnip
-    { import = "plugins.nvim-cmp" },
+    { import = 'plugins.nvim-cmp' },
 
     --Improved yank and put functionalities
     { import = 'plugins.yanky' },
