@@ -47,6 +47,7 @@ function lazy.setup(plugins, opts)
 end
 
 lazy.setup({
+    --插件加载的顺序与priority(默认50)有关,与这里的顺序无关
     --{ import = 'plugins.xxx' }:lazy.nvim启动时会加载对应的文件:lua/plugins/xxx.lua
     --A clean,dark neovim theme written in Lua
     { import = 'plugins.tokyonight' },
@@ -86,6 +87,8 @@ lazy.setup({
 
     --Telescope's purpose is to provide an interface to filter a list of items
     { import = 'plugins.telescope' },
+
+    { import = 'plugins.nvim-treesitter' },
 
     --nvim-lspconfig:用于简化语言服务器的配置
     { import = 'plugins.nvim-lspconfig' },
