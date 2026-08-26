@@ -22,7 +22,7 @@ return {
         config = function(_, opts)
             --先setup,再应用配色
             require('tokyonight').setup(opts)
-            vim.cmd.colorscheme('tokyonight-night')
+            vim.cmd.colorscheme('tokyonight')
         end,
     },
 }
