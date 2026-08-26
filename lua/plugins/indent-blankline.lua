@@ -2,7 +2,6 @@
 
 return {
     'lukas-reineke/indent-blankline.nvim',
-    main = "ibl",
 
     event = { 'VeryLazy' },
 
@@ -30,8 +29,17 @@ return {
 
         require("ibl").setup {
             indent = {
-                highlight = highlight
-            }
+                highlight = highlight,
+                --char = '┊',
+            },
+            --关闭默认的:当前缩进层级高亮
+            scope = {
+                enabled = false,
+            },
+            --这些文件类型不显示缩进线
+            exclude = {
+                filetypes = { 'help', 'dashboard', 'markdown' },
+            },
         }
     end
 }
