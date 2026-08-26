@@ -27,18 +27,22 @@ return {
     end,
 
     config = function()
-        --查看更改(can take a preceding count)
-        vim.keymap.set("n", "[c", "<Plug>(GitGutterNextHunk)", { silent = true, desc = "GitGutter:Next hunk" })
-        vim.keymap.set("n", "]c", "<Plug>(GitGutterPrevHunk)", { silent = true, desc = "GitGutter:Previous hunk" })
+        --查看上/下一个更改(can take a preceding count)
+        vim.keymap.set("n", "[c", "<Plug>(GitGutterPrevHunk)", { silent = true, desc = "GitGutter:Previous hunk" })
+        vim.keymap.set("n", "]c", "<Plug>(GitGutterNextHunk)", { silent = true, desc = "GitGutter:Next hunk" })
 
         --暂存当前的更改
         vim.keymap.set("n", "<space>ha", ":GitGutterStageHunk<cr>", { silent = true, desc = "GitGutter:Stage hunk" })
 
         --撤销当前的更改
         vim.keymap.set("n", "<space>hr", ":GitGutterUndoHunk<cr>", { silent = true, desc = "GitGutter:Undo hunk" })
+
+        --在底部窗口查看当前hunk的diff
+        vim.keymap.set("n", "<space>hp", ":GitGutterPreviewHunk<cr>", { silent = true, desc = "GitGutter:Preview hunk" })
     end,
 }
 
+--:GitGutterToggle:开关
 --:GitGutterStageBuffer:暂存当前buffer的所有更改
 --:GitGutterUndoBuffer:撤销当前buffer的所有更改
 --:GitGutterQuickFix:load all hunks into the quickfix list
