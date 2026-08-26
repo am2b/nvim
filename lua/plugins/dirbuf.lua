@@ -13,17 +13,16 @@
 
 return {
     'elihunter173/dirbuf.nvim',
+
     keys = {
         { "-", "<cmd>Dirbuf<cr>", desc = "Open Dirbuf" },
     },
+
+    --命令:Dirbuf也是打开Dirbuf
     cmd = { "Dirbuf" },
 
     opts = {
         --write_cmd = "DirbufSync -confirm",
         write_cmd = "DirbufSync",
     },
-
-    --config = function()
-    --    require('utils.notify').notify_with_timeout("插件:dirbuf 已加载", 3000)
-    --end,
 }
