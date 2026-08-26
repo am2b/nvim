@@ -99,9 +99,9 @@ set.shortmess:append("S")
 set.inccommand = "split"
 
 --光标上下滚动时,始终保留至少8行可见,光标不会贴到屏幕顶/底
-set.scrolloff = 8
+--set.scrolloff = 8
 --同上,水平方向
-set.sidescrolloff = 8
+--set.sidescrolloff = 8
 
 --显示不可见字符:tab显示成"» ",行尾/行中的尾随空格显示成"·",不换行空格显示成"␣",只影响显示,不改文件内容
 --注意:list开着但listchars没给tab定义时,vim会用默认`^I`表示tab
