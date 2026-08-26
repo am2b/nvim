@@ -39,7 +39,7 @@ return {
         --insert mode
         cmp.setup({
             completion = {
-                --关闭自动弹出
+                --关闭自动弹出,补全菜单只在按<tab>时出现
                 autocomplete = false,
             },
             mapping = cmp.mapping.preset.insert({
@@ -70,6 +70,10 @@ return {
                     behavior = cmp.ConfirmBehavior.Replace,
                     select = true,
                 }),
+
+                --c-j/c-k上下选择(和c-n/c-p等价)(这样映射的理由看底部的注释)
+                ["<c-j>"] = cmp.mapping.select_next_item(),
+                ["<c-k>"] = cmp.mapping.select_prev_item(),
             }),
 
             --告诉cmp:补全项里如果包含snippet(例如Python中的for自动生成循环),就交给LuaSnip展开
@@ -105,6 +109,11 @@ return {
                     return vim_item
                 end,
             },
+
+            --右侧预览
+            experimental = {
+                ghost_text = { hl_group = "Comment" },
+            },
         })
 
         --cmdline mode
@@ -127,3 +136,13 @@ return {
         })
     end,
 }
+
+--<c-j>默认在insert模式下会插入换行(换行,同回车)
+--奇怪的现象:
+--在tab触发下拉菜单后,按下c-j菜单条目变多了
+--解释:
+--nvim-cmp没有接管<c-j>,<c-j>落回vim的默认行为(插入了一个换行符)
+--于是发生了连锁反应:
+--1,插入了换行符后,缓冲区的内容变了
+--2,nvim-cmp检测到文本变化了,于是重新计算补全上下文
+--3,光标现在到了新的一行,前面没有词,补全前缀变成了空,所有的buffer/lsp条目都匹配空前缀,菜单条目自然就"变多"了

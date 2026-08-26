@@ -67,7 +67,6 @@ keymap.set({ "n", "x" }, ",", "<nop>")
 --gv:select the previous selected area in visual mode
 --c-r c-w:put the word under cursor into command line in command mode
 
-require("core.keymaps-insert")
 require("core.keymaps-command")
 require("core.keymaps-normal-leader")
 require("core.keymaps-normal-space")
