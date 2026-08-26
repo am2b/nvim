@@ -3,11 +3,10 @@
 return {
     'mbbill/undotree',
 
-    event = { 'VeryLazy' },
-
-    config = function()
-        vim.keymap.set('n', '<space>ut', vim.cmd.UndotreeToggle, { desc = "Toggle undotree" })
-    end
+    --启动时注册键位,等到第一次按键时才真正加载插件
+    keys = {
+        { '<space>ut', vim.cmd.UndotreeToggle, desc = 'Toggle undotree' },
+    },
 }
 
 --every change has a sequence number and it is displayed before timestamps
