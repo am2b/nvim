@@ -1,4 +1,4 @@
-local sys = vim.loop.os_uname().sysname
+local sys = vim.uv.os_uname().sysname
 local is_mac = sys == "Darwin"
 local is_linux = sys == "Linux"
 
@@ -30,7 +30,6 @@ end, {})
 local function set_input_method(id)
     if is_mac then
         if vim.fn.executable("im-select") == 1 then
-            --os.execute("im-select " .. id)
             vim.system({ "im-select", id })
         end
     elseif is_linux then
@@ -40,8 +39,12 @@ local function set_input_method(id)
     end
 end
 
+local group = vim.api.nvim_create_augroup("im_auto_switch", { clear = true })
+-- 每个 autocmd 都加 group = group
+
 --进入insert mode模式时,如果打开了开关,则切换为中文输入法
 vim.api.nvim_create_autocmd("InsertEnter", {
+    group = group,
     callback = function()
         if manual_switch_for_chinese then
             set_input_method(chinese_input)
@@ -51,6 +54,7 @@ vim.api.nvim_create_autocmd("InsertEnter", {
 
 --进入命令模式时,如果打开了开关,则切换为中文输入法
 vim.api.nvim_create_autocmd("CmdlineEnter", {
+    group = group,
     callback = function()
         if manual_switch_for_chinese then
             set_input_method(chinese_input)
@@ -60,6 +64,7 @@ vim.api.nvim_create_autocmd("CmdlineEnter", {
 
 --离开insert mode时,无条件的切换到英文输入法
 vim.api.nvim_create_autocmd("InsertLeave", {
+    group = group,
     callback = function()
         set_input_method(english_input)
     end,
@@ -67,6 +72,7 @@ vim.api.nvim_create_autocmd("InsertLeave", {
 
 --离开命令模式(:/?)时,无条件的切换到英文输入法
 vim.api.nvim_create_autocmd("CmdlineLeave", {
+    group = group,
     callback = function()
         set_input_method(english_input)
     end,

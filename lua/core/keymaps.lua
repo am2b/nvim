@@ -19,15 +19,6 @@
 
 local keymap = vim.keymap
 
---leader
---s as leader key, use cl for the original s
-keymap.set({ "n", "x" }, "s", "<nop>")
-vim.g.mapleader = "s"
-
---local leader(用于在特定的filetype中做映射)
-keymap.set({ "n", "x" }, ",", "<nop>")
-vim.g.maplocalleader = ","
-
 --normal mode
 --c-u, c-f:pageup and pagedown
 keymap.set("n", "<c-u>", "<pageup>", { desc = "Normal:Page up" })
@@ -59,6 +50,10 @@ keymap.set("n", "N", "Nzz", { desc = "Normal:Put cursor at center of window when
 
 --微调zz,<c-e>:将光标所在行向上移动一行,<c-y>:将光标所在行向下移动一行(光标跟着移动)
 keymap.set("n", "zz", "zt5<c-y>", { desc = "Normal:Fine-tuning the zz command" })
+
+--leader
+keymap.set({ "n", "x" }, "s", "<nop>")
+keymap.set({ "n", "x" }, ",", "<nop>")
 
 --keybindings:
 --vim.keymap.set can use a lua function as the action:

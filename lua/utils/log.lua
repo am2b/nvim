@@ -1,6 +1,5 @@
 local M = {}
-
-local log_file_path = vim.fn.expand("/tmp/nvim_debug.log")
+local log_file_path = vim.fn.stdpath('state') .. '/nvim_debug.log'
 
 M.log = function(msg)
     local file = io.open(log_file_path, "a")
