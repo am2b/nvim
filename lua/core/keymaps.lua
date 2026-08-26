@@ -19,13 +19,13 @@
 
 local keymap = vim.keymap
 
+--leader
 --s as leader key, use cl for the original s
 keymap.set({ "n", "x" }, "s", "<nop>")
---leader key
 vim.g.mapleader = "s"
 
+--local leader(用于在特定的filetype中做映射)
 keymap.set({ "n", "x" }, ",", "<nop>")
---local leader key(用于在特定的filetype中做映射)
 vim.g.maplocalleader = ","
 
 --normal mode

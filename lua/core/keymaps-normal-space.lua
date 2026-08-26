@@ -4,9 +4,13 @@ local keymap = vim.keymap
 keymap.set("n", "<space>dd", "<cmd>bdelete<cr>", { desc = "Normal:Delete current buffer" })
 
 --reload lua snippets
-keymap.set("n", "<space>rs",
-    "<cmd>lua require('luasnip.loaders.from_lua').load({paths = '~/.config/nvim/snippets/'})<cr>",
-    { desc = "Normal:reload lua snippets" })
+keymap.set("n", "<space>rs", function()
+    --先清空已加载的snippet
+    require("luasnip").cleanup()
+    require("luasnip.loaders.from_lua").load({
+        paths = vim.fn.stdpath("config") .. "/snippets/",
+    })
+end, { desc = "Normal:reload lua snippets" })
 
 --replace the word under cursor
 vim.keymap.set('n', '<space>su', function()
@@ -36,24 +40,7 @@ end, { noremap = true, silent = true, desc = "substitute the word under the curs
 --第3个参数(escape_ks):传入false,表示不进一步转义按键字符串
 
 --format a line of chinese comment
-vim.keymap.set('n', '<space>nl',
-    --execute:在lua中用于动态执行字符串形式的vim命令
-    --silent!:执行命令时不会在命令行中显示任何信息或错误,!表示即使替换失败也不会报错
-    --\s:匹配空白字符,包括空格和制表符
-    --\|:逻辑"或"(OR)
-    --let@/=''
-    --作用:清空搜索寄存器,避免高亮
-    --@/:vim的搜索寄存器,用于存储最近一次的搜索或替换模式
-    --silent!:用于在vim命令中静默执行命令并忽略错误
-    --silent=true:用于在lua调用中静默执行函数
-    --删除空白字符和行末尾的句号
-    --替换逗号,冒号,小括号,双引号,问号
-    [[:execute 'silent! s/\s\|。$//g | silent! s/，/,/g | silent! s/：/:/g | silent! s/（/(/g | silent! s/）/)/g | silent! s/“/"/g | silent! s/”/"/g | silent! s/？/?/g' | let @/='' <cr>]],
-    {
-        noremap = true,
-        silent = true,
-        desc = 'format a line of chinese comment'
-    })
+keymap.set('n', '<space>nl', '<cmd>MyFormatChineseCommentsLine<cr>', { desc = 'format a line of chinese comments' })
 
 --模拟ctrl + z来挂起nvim
 keymap.set("n", "<space>ff", "<c-z>", { desc = "Normal:ctrl + z" })

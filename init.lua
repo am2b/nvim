@@ -1,18 +1,6 @@
 vim.loader.enable()
 
+--因为<leader>在core.keymaps里设置,所以core要先于plugins加载,否则插件里使用<leader>的映射拿到的<leader>为空
 require("core")
 require("plugins")
 require("tools")
-
---neovim will search in every directory in the runtimepath for a folder called lua
---Lua files located in some special directories in runtimepath can be loaded automatically by neovim:
---colors/
---compiler/
---ftplugin/
---indent/
---plugin/
---syntax/
---note:in a runtime directory,all *.vim files are sourced before *.lua files.
-
---loads lua/module/init.lua
---require('module')

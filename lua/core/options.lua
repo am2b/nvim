@@ -75,8 +75,11 @@ set.foldnestmax = 5
 
 --enable persistent undo
 set.undofile = true
---指定一个特定的撤销文件目录，以避免杂乱
-set.undodir = os.getenv("HOME") .. "/.nvim/undodir"
+--~/.local/share/nvim/undo
+local undo_dir = vim.fn.stdpath("data") .. "/undo"
+vim.fn.mkdir(undo_dir, "p")
+set.undodir = undo_dir
+
 set.swapfile = false
 
 --use the clipboard for all operations
@@ -92,6 +95,19 @@ set.smartcase = true
 --display search hit BOTTOM or TOP
 set.shortmess:append("S")
 
+--:s/foo/bar时实时预览替换结果,"split"是在下方开一个小预览窗展示(更清晰),"nosplit"是原地显示
+set.inccommand = "split"
+
+--光标上下滚动时,始终保留至少8行可见,光标不会贴到屏幕顶/底
+set.scrolloff = 8
+--同上,水平方向
+set.sidescrolloff = 8
+
+--显示不可见字符:tab显示成"» ",行尾/行中的尾随空格显示成"·",不换行空格显示成"␣",只影响显示,不改文件内容
+--注意:list开着但listchars没给tab定义时,vim会用默认`^I`表示tab
+set.list = true
+set.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+
 --appearance
 --neovim 0.10.0 will now automatically determine if the terminal emulator supports 24 bit color (“truecolor”) and enable the 'termguicolors' option if it does
 --enable 24-bit RGB color in the TUI
@@ -103,7 +119,8 @@ set.signcolumn = "yes"
 --give this job to statusline
 set.showmode = false
 
---结论:telescope可以完全替代:grep和grep-operator.vim
+--结论:
+--telescope可以完全替代:grep和grep-operator.vim
 --指定:grep命令背后实际调用的外部工具
 --:grep可以通过外部程序搜索,:vimgrep只能通过vim内部搜索(:vimgrep速度慢)
 -- --vimgrep:没这个参数,vim无法正确解析结果并放进quickfix
@@ -121,14 +138,6 @@ set.showmode = false
 --visual mode:
 --<leader>g:使用grep搜索被选中的内容
 set.grepprg = "rg --vimgrep --follow --smart-case --hidden --glob '!**/.git/**'"
---让:grep自动打开quickfix窗口(省略掉:copen)
---vim.api.nvim_create_autocmd("QuickFixCmdPost", {
---    pattern = { "[^l]*" },
---    callback = function()
---        --只在有结果时才开(copen会强制开空窗口)
---        vim.cmd("cwindow")
---    end,
---})
 
 --如果经常处理大文件的话，增加以下2个设置以提高性能
 set.lazyredraw = true

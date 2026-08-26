@@ -61,7 +61,7 @@ function SELECT_INDENT(around)
     --to do so, we simply need to increase our starting indentation depending on the count given.
     --vim.v.count is the count given to the text-object
     if vim.v.count > 0 then
-        start_indent = start_indent - vim.o.shiftwidth * (vim.v.count - 1)
+        start_indent = start_indent - vim.bo.shiftwidth * (vim.v.count - 1)
         --verify if our starting indentation is lower than 0, which could happen if we enter a count on a line without any indentation
         if start_indent < 0 then
             start_indent = 0

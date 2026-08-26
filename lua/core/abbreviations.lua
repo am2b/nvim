@@ -30,7 +30,7 @@ vim.api.nvim_create_autocmd('FileType', {
 
 --perl
 vim.api.nvim_create_autocmd('FileType', {
-    group = augroup_python,
+    group = augroup_perl,
     pattern = "perl",
     desc = "abbreviation:#! for perl",
     command = "inoreabbrev <buffer> sb$ #!/usr/bin/env perl",

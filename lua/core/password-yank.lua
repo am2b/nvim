@@ -12,6 +12,8 @@ local function yank_without_n()
     local line = vim.fn.getline(".")
     --填充默认寄存器
     vim.fn.setreg('"', line)
+    --填充0寄存器,保证<leader>p(ciw<c-r>0)可用
+    vim.fn.setreg('0', line)
     --填充系统剪贴板寄存器
     vim.fn.setreg('+', line)
 

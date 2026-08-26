@@ -17,7 +17,7 @@ local function check_shell_script_valid(script_path)
     --判断文件是否拥有可执行权限
     --getfperm返回格式示例:rwxr-xr-x,最后一位是当前用户执行位
     local file_perm = vim.fn.getfperm(script_path)
-    if file_perm:sub(-1) ~= "x" then
+    if file_perm:sub(3, 3) ~= "x" then
         vim.notify(
             string.format("脚本无执行权限,请执行:chmod +x %s", script_path),
             vim.log.levels.WARN
@@ -44,17 +44,6 @@ vim.api.nvim_create_user_command('MyReplaceMarks', function()
         return
     end
 
-    --校验脚本文件是否存在
-    if not vim.fn.filereadable(script) then
-        vim.notify("脚本不存在:" .. script, vim.log.levels.ERROR)
-        return
-    end
-    --校验脚本是否拥有可执行权限
-    if vim.fn.getfperm(script):sub(-1) ~= "x" then
-        vim.notify("脚本无执行权限,请执行:chmod +x " .. script, vim.log.levels.WARN)
-        return
-    end
-
     vim.cmd('w')
     --调用配置目录下的脚本绝对路径
     --vim.fn.shellescape():对脚本路径,文件路径做shell转义,防止路径包含空格,特殊符号时命令执行报错
@@ -68,80 +57,73 @@ vim.api.nvim_create_user_command('MyReplaceMarks', function()
 end, { nargs = 0, desc = 'replace chinese punctuation marks' }
 )
 
---vim.loop.fs_stat(file_name)
---vim.loop是neovim内置的LibUV接口,用于异步操作文件和系统功能
+local function has_user_exec(file_name)
+    local perm = vim.fn.getfperm(file_name)
+    if perm == "" then
+        vim.notify("无法访问文件: " .. file_name, vim.log.levels.ERROR)
+        return nil
+    end
+    --"rwxr-xr-x":第3位是当前用户的可执行位
+    return perm:sub(3, 3) == "x"
+end
+
+--vim.uv.fs_stat(file_name)
+--vim.uv是neovim内置的LibUV接口,用于异步操作文件和系统功能
 --fs_stat(file_name)返回一个表,包含目标文件的详细信息,如大小,模式,修改时间等,如果文件不存在或访问失败,返回nil
+vim.api.nvim_create_user_command("MyAddX", function()
+    local file_name = vim.fn.expand('%')
+    if file_name == "" then
+        print("no file to make executable")
+        return
+    end
 
---bit.band(stat.mode, 0x40)
---使用位操作按位与(bit.band)提取stat.mode中的0x40位,判断文件是否具有用户可执行权限
---stat.mode是文件的权限模式,它是一个整数,表示文件的权限和类型
---0x40是一个位掩码,十六进制表示文件的"用户可执行"权限(S_IXUSR)
+    local exec = has_user_exec(file_name)
+    if exec == nil then return end
 
---bit.band(stat.mode, 0x40) ~= 0:文件具有用户可执行权限
---bit.band(stat.mode, 0x40) == 0:文件没有用户可执行权限
-vim.api.nvim_create_user_command(
-    "MyAddX",
-    function()
-        local file_name = vim.fn.expand('%')
-        if file_name ~= "" then
-            local stat = vim.loop.fs_stat(file_name)
-            if not stat then
-                print("failed to access file status")
-            end
-            if bit.band(stat.mode, 0x40) == 0 then
-                vim.fn.system("chmod +x " .. file_name)
-                print("added execute permission to " .. file_name)
-            else
-                print(file_name .. " has execute permission")
-            end
-        else
-            print("no file to make executable")
-        end
-    end,
-    { nargs = 0, desc = 'add executable permission to current file' }
-)
+    if not exec then
+        vim.fn.system("chmod +x " .. vim.fn.shellescape(file_name))
+        print("added execute permission to " .. file_name)
+    else
+        print(file_name .. " has execute permission")
+    end
+end, { nargs = 0, desc = 'add executable permission to current file' })
 
-vim.api.nvim_create_user_command(
-    "MyRemoveX",
-    function()
-        local file_name = vim.fn.expand('%')
-        if file_name ~= "" then
-            local stat = vim.loop.fs_stat(file_name)
-            if not stat then
-                print("failed to access file status")
-            end
-            if bit.band(stat.mode, 0x40) ~= 0 then
-                vim.fn.system("chmod -x " .. file_name)
-                print("removed execute permission from " .. file_name)
-            else
-                print(file_name .. " does not have execute permission")
-            end
-        else
-            print("no file to remove executable permission")
-        end
-    end,
-    { nargs = 0, desc = 'remove executable permission from current file' }
-)
+vim.api.nvim_create_user_command("MyRemoveX", function()
+    local file_name = vim.fn.expand('%')
+    if file_name == "" then
+        print("no file to make executable")
+        return
+    end
 
-vim.api.nvim_create_user_command(
-    "MyToggleX",
-    function()
-        local file_name = vim.fn.expand('%')
-        if file_name ~= "" then
-            local stat = vim.loop.fs_stat(file_name)
-            if stat and bit.band(stat.mode, 0x40) ~= 0 then
-                vim.fn.system("chmod -x " .. file_name)
-                print("removed execute permission from " .. file_name)
-            else
-                vim.fn.system("chmod +x " .. file_name)
-                print("added execute permission to " .. file_name)
-            end
-        else
-            print("no file to toggle executable permission")
-        end
-    end,
-    { nargs = 0, desc = 'toggle executable permission of current file' }
-)
+    local exec = has_user_exec(file_name)
+    if exec == nil then return end
+
+    if exec then
+        vim.fn.system("chmod -x " .. vim.fn.shellescape(file_name))
+        print("removed execute permission from " .. file_name)
+    else
+        print(file_name .. " does not have execute permission")
+    end
+end, { nargs = 0, desc = 'remove executable permission from current file' })
+
+vim.api.nvim_create_user_command("MyToggleX", function()
+    local file_name = vim.fn.expand('%')
+    if file_name == "" then
+        print("no file to toggle execute permission")
+        return
+    end
+
+    local exec = has_user_exec(file_name)
+    if exec == nil then return end
+
+    if not exec then
+        vim.fn.system("chmod +x " .. vim.fn.shellescape(file_name))
+        print("added execute permission to " .. file_name)
+    else
+        vim.fn.system("chmod -x " .. vim.fn.shellescape(file_name))
+        print("removed execute permission from " .. file_name)
+    end
+end, { nargs = 0, desc = 'toggle executable permission of current file' })
 
 vim.api.nvim_create_user_command('MyInsertDate', function()
     vim.api.nvim_put({ os.date("%Y-%m-%d") }, 'c', true, true)
@@ -153,6 +135,11 @@ end, { desc = 'insert date and time' })
 
 vim.api.nvim_create_user_command('MyInsertPass', function(opts)
     local script = nvim_config_path .. "/scripts/generate_password.sh"
+
+    if not check_shell_script_valid(script) then
+        return
+    end
+
     --当nargs为"?"时opts.args是可选参数,那么没有传递参数时opts.args的值默认为空字符串,而空字符串在lua里面被认为是true
     local len = opts.args ~= "" and opts.args or "64"
     local command = string.format("%s %s", script, len)
@@ -207,18 +194,6 @@ vim.api.nvim_create_user_command("MyTotp", function()
     end
 end, {})
 
-vim.api.nvim_create_user_command('MySortImports', function(opts)
-    --获取当前文件的绝对路径
-    local file_path = vim.fn.expand('%:p')
-    if vim.bo.filetype == 'python' then
-        local script_path = nvim_config_path .. '/scripts/python_sort_imports.sh'
-        --执行bash脚本,并传递当前python文件路径
-        vim.fn.system('bash ' .. script_path .. ' ' .. file_path)
-        --刷新当前文件(重新加载buffer)
-        vim.api.nvim_command('edit')
-    end
-end, {})
-
 --删除全部的缓冲区,但是除了当前缓冲区
 vim.api.nvim_create_user_command("MyDeleteOtherBuffers", [[
     let cur = bufnr('%') | silent! execute 'bufdo if bufnr("%") != '.cur.' | bdelete! | endif'
@@ -226,3 +201,50 @@ vim.api.nvim_create_user_command("MyDeleteOtherBuffers", [[
 
 --删除全部的缓冲区
 vim.api.nvim_create_user_command("MyDeleteAllBuffers", "bufdo bd", {})
+
+--替换一行里面的中文标点符号
+vim.api.nvim_create_user_command('MyFormatChineseCommentsLine', function()
+    vim.cmd([[
+        silent! s/\s\|。$//g
+        silent! s/，/,/g
+        silent! s/：/:/g
+        silent! s/（/(/g
+        silent! s/）/)/g
+        silent! s/“/"/g
+        silent! s/”/"/g
+        silent! s/？/?/g
+        let @/=''
+    ]])
+end, { desc = 'Format a line of chinese comments' })
+
+--替换整个buffer里面的中文标点符号
+vim.api.nvim_create_user_command('MyFormatChineseCommentsBuffer', function()
+    vim.cmd([[
+        silent! %s/\s\|。$//g
+        silent! %s/，/,/g
+        silent! %s/：/:/g
+        silent! %s/（/(/g
+        silent! %s/）/)/g
+        silent! %s/“/"/g
+        silent! %s/”/"/g
+        silent! %s/？/?/g
+        let @/=''
+    ]])
+end, { desc = 'Format a buffer of chinese comments' })
+
+vim.api.nvim_create_user_command('MySortImports', function(opts)
+    --获取当前文件的绝对路径
+    local file_path = vim.fn.expand('%:p')
+    if vim.bo.filetype == 'python' then
+        local script = nvim_config_path .. '/scripts/python_sort_imports.sh'
+
+        if not check_shell_script_valid(script) then
+            return
+        end
+
+        --执行bash脚本,并传递当前python文件路径
+        vim.fn.system('bash ' .. script .. ' ' .. vim.fn.shellscape(file_path))
+        --刷新当前文件(重新加载buffer)
+        vim.api.nvim_command('edit')
+    end
+end, {})
