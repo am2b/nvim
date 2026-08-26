@@ -24,8 +24,9 @@ local line_begin = conds_expand.line_begin
 local M = {}
 
 function M.get_selected(args, parent)
-    if (#parent.snippet.env.LS_SELECT_RAW > 0) then
-        return sn(nil, i(1, parent.snippet.env.LS_SELECT_RAW))
+    local raw = parent.snippet.env.LS_SELECT_RAW
+    if raw and #raw > 0 then
+        return sn(nil, i(1, raw))
     else
         return sn(nil, i(1))
     end
