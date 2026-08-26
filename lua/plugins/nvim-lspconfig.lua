@@ -60,19 +60,12 @@ return {
             map("n", "gd", vim.lsp.buf.definition, "Go to definition")
             --跳转到声明(有些语言区分定义和声明)
             map("n", "gD", vim.lsp.buf.declaration, "Go to declaration")
-            --跳转到实现
-            --map("n", "gi", vim.lsp.buf.implementation, "Go to implementation")
-            --跳转到被引用的位置
-            --map("n", "gr", vim.lsp.buf.references, "Go to references")
             --显示悬停文档
-            map("n", "K", vim.lsp.buf.hover, "Hover documentation")
-            --显示函数签名
-            --map("n", "<C-k>", vim.lsp.buf.signature_help, "Signature help")
+            --map("n", "K", vim.lsp.buf.hover, "Hover documentation")
 
             --重命名变量
-            map("n", "<leader>rn", vim.lsp.buf.rename, "Rename symbol")
-            --显示代码动作(如快速修复)
-            --map("n", "<leader>ca", vim.lsp.buf.code_action, "Code action")
+            --map("n", "<leader>rn", vim.lsp.buf.rename, "Rename symbol")
+
             --格式化
             map("n", "<space>fm", function()
                 local ft = vim.bo.filetype
@@ -80,7 +73,7 @@ return {
                     --使用外部格式化器(异步)
                     formatters[ft]()
                 elseif ft == "go" then
-                    -- 使用 gopls 格式化，然后 retab!
+                    -- 使用gopls格式化,然后retab
                     vim.lsp.buf.format({ async = true })
                     --延迟100ms,确保format执行完
                     vim.defer_fn(function()
@@ -119,6 +112,7 @@ return {
             lua_ls = {
                 settings = {
                     Lua = {
+                        runtime = { version = "LuaJIT" },
                         diagnostics = { globals = { "vim", "hs" } },
                     },
                 },
@@ -136,3 +130,10 @@ return {
         end
     end,
 }
+
+--neovim 0.12启动时就自动注册了lsp-defaults:
+--grr:references(引用)
+--gri:implementation(实现)
+--gra:code_action(代码动作)
+--grn:rename(重命名)
+--grt:type_definition,gO:document_symbol,insert <c-s>:signature_help
