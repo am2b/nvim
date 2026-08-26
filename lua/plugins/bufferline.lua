@@ -1,7 +1,5 @@
 --https://github.com/akinsho/bufferline.nvim
 
---:h bufferline-configuration
-
 return {
     'akinsho/bufferline.nvim',
 
@@ -21,14 +19,14 @@ return {
             show_tab_indicators = true,
             --设置分隔符风格
             --separator_style = "slant",
+            --在tab上显示错误(buffer名字变红)
+            diagnostics = 'nvim_lsp',
         },
     },
 
-    config = function(_, opts)
-        require('bufferline').setup(opts)
-
-        vim.keymap.set("n", "|", "<cmd>BufferLinePick<cr>", { desc = "Pick buffer" })
-        vim.keymap.set("n", "(", "<cmd>BufferLineCyclePrev<cr>", { desc = "Go to prev buffer" })
-        vim.keymap.set("n", ")", "<cmd>BufferLineCycleNext<cr>", { desc = "Go to next buffer" })
-    end
+    keys = {
+        { '|', '<cmd>BufferLinePick<cr>',      desc = 'Pick buffer' },
+        { '(', '<cmd>BufferLineCyclePrev<cr>', desc = 'Go to prev buffer' },
+        { ')', '<cmd>BufferLineCycleNext<cr>', desc = 'Go to next buffer' },
+    },
 }
