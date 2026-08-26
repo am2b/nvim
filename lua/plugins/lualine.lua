@@ -10,7 +10,7 @@ return {
 
     dependencies = { 'nvim-tree/nvim-web-devicons' },
 
-    event = { 'VeryLazy' },
+    lazy = false,
 
     config = function()
         local utils = require("plugins.utils")
@@ -22,6 +22,7 @@ return {
 
         local opts = {
             options = {
+                --or 'auto'
                 theme = 'powerline_dark',
                 icons_enabled = true,
                 component_separators = { left = '', right = '' },
