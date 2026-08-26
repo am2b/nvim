@@ -17,7 +17,9 @@ return {
         defaults = {
             mappings = {
                 i = {
-                    ["<c-c>"] = require('telescope.actions').close
+                    ["<c-c>"] = function()
+                        require('telescope.actions').close()
+                    end,
                 },
             },
 
@@ -49,7 +51,6 @@ return {
         pickers = {
             find_files = {
                 find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
-                hidden = true,
             },
             live_grep = {
                 --为live_grep picker添加自定义布局
@@ -61,10 +62,10 @@ return {
             --使用fzf扩展,提升模糊搜索效率
             fzf = {
                 fuzzy = true,
-                --使用fzf排序
-                override_generic_sorter = true,
-                --替换文件排序
-                override_file_sorter = true,
+                --使用fzf排序(应该是已经默认恒真了)
+                --override_generic_sorter = true,
+                --替换文件排序(应该是已经默认恒真了)
+                --override_file_sorter = true,
                 --大小写智能匹配
                 case_mode = "smart_case",
             },
@@ -97,8 +98,11 @@ return {
         vim.keymap.set('n', '<leader>fu', builtin.grep_string,
             { desc = "Telescope:find string under cursor or selection" })
 
-        --search symbols(类名,函数名,变量等)
+        --search symbols(当前buffer:类名,函数名,变量等)
         vim.keymap.set('n', '<leader>ff', builtin.lsp_document_symbols, { desc = 'Telescope:find document symbols' })
+        --search symbols(整个项目:类名,函数名,变量等)
+        --dynamic:自动用光标下的词作为初始搜索词(不用手动输入),并随打字实时刷新
+        vim.keymap.set('n', '<leader>fs', builtin.lsp_dynamic_workspace_symbols, { desc = "Telescope:find workspace symbols" })
 
         --vim pickers
         --list buffers
@@ -143,6 +147,9 @@ return {
         --lists built-in pickers and run them on <cr>
         vim.keymap.set('n', '<leader>fd', builtin.builtin,
             { desc = "Telescope:list built-in pickers and run them on <cr>" })
+
+        --列出lsp所报的问题:错误,警告,提示等
+        vim.keymap.set('n', '<leader>fg', builtin.diagnostics, { desc = "Telescope:list diagnostics" })
 
         --require('utils.notify').notify_with_timeout("插件:telescope 已加载", 3000)
     end
