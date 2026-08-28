@@ -69,13 +69,13 @@ check_parameters() {
 process_opts() {
     while getopts ":h" opt; do
         case "$opt" in
-        h)
-            usage 0
-            ;;
-        *)
-            echo "error:unsupported option -$opt" >>&2
-            usage
-            ;;
+            h)
+                usage 0
+                ;;
+            *)
+                echo "error:unsupported option -$opt" >>&2
+                usage
+                ;;
         esac
     done
 }
