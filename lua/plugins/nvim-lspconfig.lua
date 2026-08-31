@@ -73,14 +73,20 @@ return {
                     --使用外部格式化器(异步)
                     formatters[ft]()
                 elseif ft == "go" then
+                    --同步格式化:阻塞直到gopls写完,再立即转tab为空格,无竞态
+                    vim.lsp.buf.format({ async = false })
+                    vim.bo.expandtab = true
+                    vim.cmd("retab!")
+
+                    --可能存在竞态:100ms后gopls未必已经写完,retab!可能跑在格式化之前
                     -- 使用gopls格式化,然后retab
-                    vim.lsp.buf.format({ async = true })
+                    --vim.lsp.buf.format({ async = true })
                     --延迟100ms,确保format执行完
-                    vim.defer_fn(function()
+                    --vim.defer_fn(function()
                         --启用expandtab,retab!才会将tab替换为空格
-                        vim.bo.expandtab = true
-                        vim.cmd("retab!")
-                    end, 100)
+                        --vim.bo.expandtab = true
+                        --vim.cmd("retab!")
+                    --end, 100)
                 else
                     --使用默认的LSP格式化
                     vim.lsp.buf.format({ async = true })
@@ -125,7 +131,7 @@ return {
         for name, opts in pairs(servers) do
             opts.capabilities = capabilities
             opts.on_attach = on_attach
-            vim.lsp.config[name] = opts
+            vim.lsp.config(name, opts)
             vim.lsp.enable(name)
         end
     end,
