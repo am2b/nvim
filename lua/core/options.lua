@@ -90,6 +90,8 @@ set.splitright = true
 set.splitbelow = true
 
 --search
+--启用增量搜索(增量匹配高亮)
+set.incsearch = true
 set.ignorecase = true
 set.smartcase = true
 --display search hit BOTTOM or TOP
