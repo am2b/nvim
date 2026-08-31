@@ -3,6 +3,6 @@ return {
     event = { 'VeryLazy' },
 
     config = function()
-        require("smartnumber").setup()
+        require("smartnumber").setup({ relative = true })
     end,
 }
