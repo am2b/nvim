@@ -7,7 +7,7 @@ generate_password() {
     local numbers="0123456789"
     local all="$symbols$letters$numbers"
     local password=""
-    
+
     for ((i = 0; i < len; i++)); do
         index=$((RANDOM % ${#all}))
         password+="${all:index:1}"
