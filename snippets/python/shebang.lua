@@ -61,6 +61,8 @@ return {
             ]],
 
             {i(1),i(2),i(3),i(0)}
-        )
+        ),
+
+        { condition = is_first_line }
     ),
 }

@@ -73,23 +73,6 @@ return {
 
     s(
         {
-            trig = ";hm",
-            dscr = "$(date +%s%3N)",
-            snippetType = "autosnippet",
-        },
-
-        fmta(
-            [[
-                $(date +%s%3N)
-                <>
-            ]],
-
-            { i(0) }
-        )
-    ),
-
-    s(
-        {
             trig = ";bn",
             dscr = "return basename",
             snippetType = "autosnippet",
