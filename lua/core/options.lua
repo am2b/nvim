@@ -125,7 +125,7 @@ set.showmode = false
 --telescope可以完全替代:grep和grep-operator.vim
 --指定:grep命令背后实际调用的外部工具
 --:grep可以通过外部程序搜索,:vimgrep只能通过vim内部搜索(:vimgrep速度慢)
--- --vimgrep:没这个参数,vim无法正确解析结果并放进quickfix
+-- --vimgrep:没这个参数vim无法正确解析结果并放进quickfix
 --让输出格式符合vim期望的quickfix格式:file:line:column:match
 --可以排除掉多个目录,比如:--glob '!**/node_modules/**'
 --使用方法:
