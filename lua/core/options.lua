@@ -121,25 +121,31 @@ set.signcolumn = "yes"
 --give this job to statusline
 set.showmode = false
 
---结论:
---telescope可以完全替代:grep和grep-operator.vim
 --指定:grep命令背后实际调用的外部工具
---:grep可以通过外部程序搜索,:vimgrep只能通过vim内部搜索(:vimgrep速度慢)
--- --vimgrep:没这个参数vim无法正确解析结果并放进quickfix
+--:grep可以通过外部程序搜索
+
+--选项--vimgrep:没这个参数vim无法正确解析结果并放进quickfix
 --让输出格式符合vim期望的quickfix格式:file:line:column:match
 --可以排除掉多个目录,比如:--glob '!**/node_modules/**'
---使用方法:
+
+--使用方法1:
 --:grep pattern
 --<enter>
---:copen,"打开quickfix
---(j):cnext,"下一个匹配
---(k):cprev,"上一个匹配
---或通过grep-operator.vim:
+
+--使用方法2:
+--通过grep-operator.vim:
 --normal mode:
 --<leader>giw:使用grep搜索一个word
 --visual mode:
 --<leader>g:使用grep搜索被选中的内容
+
+--无需:copen去打开quickfix(:grep pattern后回车就会自动打开)
+--:cnext:下一个匹配
+--:cprev:上一个匹配
+--<space>cc:关闭quickfix
 set.grepprg = "rg --vimgrep --follow --smart-case --hidden --glob '!**/.git/**'"
+
+--另,:vimgrep只能通过vim内部搜索,速度慢,不要使用
 
 --如果经常处理大文件的话，增加以下2个设置以提高性能
 set.lazyredraw = true

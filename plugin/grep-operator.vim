@@ -1,10 +1,10 @@
-"依赖于对set grepprg的设置(已经设置了)
+"依赖于对vim.opt.grepprg的设置(已经设置了)
 
 "说明:
 "normal mode:
-"<leader>giw:使用grep搜索一个word
+"<leader>giw:使用:grep搜索一个word
 "visual mode:
-"<leader>g:使用grep搜索被选中的内容
+"<leader>g:使用:grep搜索被选中的内容
 
 "<space>cc:关闭Quickfix List
 
