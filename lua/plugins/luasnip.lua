@@ -46,13 +46,5 @@ return {
         loaders_lua.lazy_load({
             paths = { default_path, passwords_path }
         })
-
-        --c-f,c-d:jump to the next and previous placeholder
-        vim.keymap.set({ "i", "s" }, "<c-f>", function()
-            return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<c-f>"
-        end, { expr = true })
-        vim.keymap.set({ "i", "s" }, "<c-d>", function()
-            return require("luasnip").jumpable(-1) and "<Plug>luasnip-jump-prev" or "<c-d>"
-        end, { expr = true })
     end
 }

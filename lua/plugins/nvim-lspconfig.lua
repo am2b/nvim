@@ -103,14 +103,8 @@ return {
 
         --capabilities告诉LSP:neovim客户端都支持什么功能
         --LSP是客户端-服务端结构,客户端(neovim)要告诉服务端(比如Pyright):"我支持代码补全,代码片段,文档支持,跳转功能等"
-        --这句意思是:
-        --我们使用了nvim-cmp插件来做补全
-        --它提供了一个函数,可以生成一份增强版的capabilities,告诉LSP:
-        --我支持snippet补全
-        --我支持文档弹窗补全
-        --我支持自动触发补全等等
         --然后我们把这个capabilities传给每个语言服务器:opts.capabilities = capabilities
-        local capabilities = require("cmp_nvim_lsp").default_capabilities()
+        local capabilities = require("blink.cmp").get_lsp_capabilities()
 
         --安装和配置的语言服务器
         local servers = {
@@ -131,6 +125,7 @@ return {
         for name, opts in pairs(servers) do
             opts.capabilities = capabilities
             opts.on_attach = on_attach
+            --添加/修改名为name的LSP配置(以合并的方式)
             vim.lsp.config(name, opts)
             vim.lsp.enable(name)
         end

@@ -86,14 +86,7 @@ require('lazy').setup({
     { import = 'plugins.luasnip' },
 
     --自动补全
-    --会安装以下插件:
-    --nvim-cmp
-    --cmp-nvim-lsp
-    --cmp-buffer
-    --cmp-cmdline
-    --cmp-path
-    --cmp_luasnip
-    { import = 'plugins.nvim-cmp' },
+    { import = 'plugins.blink' },
 
     --Improved yank and put functionalities
     { import = 'plugins.yanky' },

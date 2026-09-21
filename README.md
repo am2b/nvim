@@ -46,7 +46,7 @@ Quickstart configs for neovim LSP
 ### [L3MON4D3/LuaSnip](https://github.com/L3MON4D3/LuaSnip):<br>
 Snippet engine
 
-### [hrsh7th/nvim-cmp](https://github.com/hrsh7th/nvim-cmp):<br>
+### [saghen/blink.cmp](https://github.com/saghen/blink.cmp):<br>
 Complete
 
 ### [gbprod/yanky.nvim](https://github.com/gbprod/yanky.nvim):<br>
