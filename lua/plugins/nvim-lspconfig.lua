@@ -6,6 +6,7 @@ return {
     event = { "BufReadPre", "BufNewFile" },
 
     config = function()
+        --外部格式化器
         local nvim_script_path = vim.fn.stdpath("config") .. "/scripts/"
 
         --异步执行外部命令,防止分页,阻塞
@@ -47,68 +48,91 @@ return {
             async_sh({ nvim_script_path .. "format_python.sh", vim.fn.expand("%") })
         end
 
-        --自动attach的回调函数:配置快捷键和功能增强
-        --会在某个LSP server成功连接到buffer时被调用
-        --client:是LSP客户端对象(如果用不到的话,可以用下划线代替)
-        --bufnr:是当前buffer的编号,用来确保keymap只对这个buffer生效
-        local on_attach = function(_, bufnr)
-            local map = function(mode, lhs, rhs, desc)
-                vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
+        --------------------------------------------------
+
+        --Format buffer
+        local function format_buffer()
+            local ft = vim.bo.filetype
+
+            if formatters[ft] then
+                --使用外部格式化器(异步)
+                formatters[ft]()
+                return
             end
 
-            --跳转到定义
-            map("n", "gd", vim.lsp.buf.definition, "Go to definition")
-            --跳转到声明(有些语言区分定义和声明)
-            map("n", "gD", vim.lsp.buf.declaration, "Go to declaration")
-            --显示悬停文档
-            --map("n", "K", vim.lsp.buf.hover, "Hover documentation")
+            if ft == "go" then
+                --同步格式化:阻塞直到gopls写完,再立即转tab为空格,无竞态
+                vim.lsp.buf.format({ async = false })
+                vim.bo.expandtab = true
+                vim.cmd("retab!")
+                return
+            end
 
-            --重命名变量
-            --map("n", "<leader>rn", vim.lsp.buf.rename, "Rename symbol")
-
-            --格式化
-            map("n", "<space>fm", function()
-                local ft = vim.bo.filetype
-                if formatters[ft] then
-                    --使用外部格式化器(异步)
-                    formatters[ft]()
-                elseif ft == "go" then
-                    --同步格式化:阻塞直到gopls写完,再立即转tab为空格,无竞态
-                    vim.lsp.buf.format({ async = false })
-                    vim.bo.expandtab = true
-                    vim.cmd("retab!")
-
-                    --可能存在竞态:100ms后gopls未必已经写完,retab!可能跑在格式化之前
-                    -- 使用gopls格式化,然后retab
-                    --vim.lsp.buf.format({ async = true })
-                    --延迟100ms,确保format执行完
-                    --vim.defer_fn(function()
-                        --启用expandtab,retab!才会将tab替换为空格
-                        --vim.bo.expandtab = true
-                        --vim.cmd("retab!")
-                    --end, 100)
-                else
-                    --使用默认的LSP格式化
-                    vim.lsp.buf.format({ async = true })
-                end
-            end, "Format buffer")
-
-            --诊断信息相关
-            --浮窗查看当前光标位置的诊断信息
-            map("n", "<leader>e", vim.diagnostic.open_float, "Show diagnostics")
-            --跳转到上/下一个报错或警告
-            map("n", "[d", vim.diagnostic.goto_prev, "Previous diagnostic")
-            map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
+            --使用默认的LSP格式化
+            vim.lsp.buf.format({ async = true })
         end
 
+        --------------------------------------------------
+
+        --LSP attach后设置buffer-local keymaps
+        --LspAttach事件:处理LSP client attach到buffer后,应该做的事情
+        vim.api.nvim_create_autocmd("LspAttach", {
+            --给刚刚完成LSP attach的buffer设置快捷键
+            callback = function(args)
+                --当前buffer
+                local bufnr = args.buf
+
+                --获取刚刚attach到当前buffer的LSP client
+                --args.data.client_id:刚刚attach的LSP client ID
+                local client = vim.lsp.get_client_by_id(args.data.client_id)
+                if client then
+                    vim.notify("LSP attached: " .. client.name, vim.log.levels.INFO)
+                end
+
+                local map = function(mode, lhs, rhs, desc)
+                    vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
+                end
+
+                --跳转到定义
+                map("n", "gd", vim.lsp.buf.definition, "Go to definition")
+
+                --跳转到声明(有些语言区分定义和声明)
+                --map("n", "gD", vim.lsp.buf.declaration, "Go to declaration")
+
+                --格式化
+                map("n", "<space>fm", format_buffer, "Format buffer")
+
+                --显示悬停文档
+                --map("n", "K", vim.lsp.buf.hover, "Hover documentation")
+
+                --重命名变量
+                --map("n", "<leader>rn", vim.lsp.buf.rename, "Rename symbol")
+
+                --诊断信息相关
+                --浮窗查看当前光标位置的诊断信息
+                map("n", "<leader>e", vim.diagnostic.open_float, "Show diagnostics")
+
+                --跳转到上/下一个报错或警告
+                map("n", "[d", vim.diagnostic.goto_prev, "Previous diagnostic")
+                map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
+            end,
+        })
+
+        --------------------------------------------------
+
+        --LSP capabilities
         --capabilities告诉LSP:neovim客户端都支持什么功能
         --LSP是客户端-服务端结构,客户端(neovim)要告诉服务端(比如Pyright):"我支持代码补全,代码片段,文档支持,跳转功能等"
         --然后我们把这个capabilities传给每个语言服务器:opts.capabilities = capabilities
         local capabilities = require("blink.cmp").get_lsp_capabilities()
 
+        --------------------------------------------------
+
+        --LSP servers
         --安装和配置的语言服务器
         local servers = {
             bashls = {},
+
             lua_ls = {
                 settings = {
                     Lua = {
@@ -117,14 +141,17 @@ return {
                     },
                 },
             },
+
             pyright = {},
             ts_ls = {},
             gopls = {},
         }
 
+        --------------------------------------------------
+
+        --Enable LSP servers
         for name, opts in pairs(servers) do
             opts.capabilities = capabilities
-            opts.on_attach = on_attach
             --添加/修改名为name的LSP配置(以合并的方式)
             vim.lsp.config(name, opts)
             vim.lsp.enable(name)
