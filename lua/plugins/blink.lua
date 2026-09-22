@@ -129,29 +129,21 @@ return {
             },
         },
 
-        --cmdline = {
-        --    enabled = true,
-        --    sources = {
-        --        [':'] = { 'path', 'cmdline' },
-        --        ['/'] = { 'buffer' },
-        --        ['?'] = { 'buffer' },
-        --    },
-        --    completion = {
-        --        menu = {
-        --            auto_show = true,
-        --            --cmdline菜单自动继承全局completion.menu.border
-        --            draw = {
-        --                columns = {
-        --                    { 'label',     'label_description', gap = 1 },
-        --                    { 'kind_icon', 'kind' },
-        --                },
-        --            },
-        --        },
-        --    },
-        --    keymap = {
-        --        ['<cr>'] = { 'accept_and_enter', 'fallback' },
-        --    },
-        --},
+        cmdline = {
+            completion = { menu = { auto_show = true } },
+            keymap = { ['<cr>'] = { 'accept_and_enter', 'fallback' }, },
+        },
+        sources = {
+            providers = {
+                cmdline = {
+                    min_keyword_length = function(ctx)
+                        --执行:命令的时候,仅当输入字符>=3时,才会触发补全
+                        if ctx.mode == 'cmdline' and string.find(ctx.line, ' ') == nil then return 3 end
+                        return 0
+                    end
+                }
+            }
+        },
 
         --模糊匹配引擎
         --rust:预编译二进制(推荐,快且抗拼写错误)
