@@ -129,6 +129,30 @@ return {
             },
         },
 
+        --cmdline = {
+        --    enabled = true,
+        --    sources = {
+        --        [':'] = { 'path', 'cmdline' },
+        --        ['/'] = { 'buffer' },
+        --        ['?'] = { 'buffer' },
+        --    },
+        --    completion = {
+        --        menu = {
+        --            auto_show = true,
+        --            --cmdline菜单自动继承全局completion.menu.border
+        --            draw = {
+        --                columns = {
+        --                    { 'label',     'label_description', gap = 1 },
+        --                    { 'kind_icon', 'kind' },
+        --                },
+        --            },
+        --        },
+        --    },
+        --    keymap = {
+        --        ['<cr>'] = { 'accept_and_enter', 'fallback' },
+        --    },
+        --},
+
         --模糊匹配引擎
         --rust:预编译二进制(推荐,快且抗拼写错误)
         --version = '1.*':会自动下载预构建的二进制
