@@ -30,34 +30,6 @@ end
 
 vim.api.nvim_create_user_command("MyReloadConfig", "source $MYVIMRC", { desc = "reload neovim configuration" })
 
---替换当前buffer中的中文标点符号
-vim.api.nvim_create_user_command('MyReplaceMarks', function()
-    local file_name = vim.fn.expand('%')
-    local script = nvim_config_path .. "/scripts/text_replace_chinese_punctuation_marks.sh"
-
-    --防止未打开文件
-    if file_name == "" then
-        vim.notify("当前未打开任何文件", vim.log.levels.ERROR)
-        return
-    end
-
-    if not check_shell_script_valid(script) then
-        return
-    end
-
-    vim.cmd('w')
-    --调用配置目录下的脚本绝对路径
-    --vim.fn.shellescape():对脚本路径,文件路径做shell转义,防止路径包含空格,特殊符号时命令执行报错
-    vim.cmd('!' .. vim.fn.shellescape(script) .. ' ' .. vim.fn.shellescape(file_name))
-    --重新加载文件
-    --vim.fn.fnameescape():对文件路径字符串进行vim路径安全转义,专门用于vim.cmd(),vim内置命令场景,避免路径包含空格,中文,括号,#,$,&等特殊字符时命令执行失败
-    vim.cmd('e ' .. vim.fn.fnameescape(file_name))
-    --vim.cmd('!text_replace_chinese_punctuation_marks.sh ' .. file_name)
-    --重新加载文件
-    --vim.cmd('e ' .. file_name)
-end, { nargs = 0, desc = 'replace chinese punctuation marks in current buffer' }
-)
-
 local function has_user_exec(file_name)
     local perm = vim.fn.getfperm(file_name)
     if perm == "" then
@@ -204,11 +176,15 @@ vim.api.nvim_create_user_command("MyDeleteOtherBuffers", [[
 vim.api.nvim_create_user_command("MyDeleteAllBuffers", "bufdo bd", {})
 
 --替换一行里面的中文标点符号
+--删除行尾的句号
+--替换行中的句号为逗号
 vim.api.nvim_create_user_command('MyReplaceMarksLine', function()
     vim.cmd([[
         silent! s/\s\+$//g
         silent! s/。$//g
+        silent! s/。/,/g
         silent! s/，/,/g
+        silent! s/、/,/g
         silent! s/：/:/g
         silent! s/（/(/g
         silent! s/）/)/g
@@ -222,11 +198,15 @@ vim.api.nvim_create_user_command('MyReplaceMarksLine', function()
 end, { desc = 'replace chinese punctuation marks in current line' })
 
 --替换整个buffer里面的中文标点符号
+--删除行尾的句号
+--替换行中的句号为逗号
 vim.api.nvim_create_user_command('MyReplaceMarksBuffer', function()
     vim.cmd([[
         silent! %s/\s\+$//g
         silent! %s/。$//g
+        silent! s/。/,/g
         silent! %s/，/,/g
+        silent! s/、/,/g
         silent! %s/：/:/g
         silent! %s/（/(/g
         silent! %s/）/)/g

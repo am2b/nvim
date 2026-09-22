@@ -40,7 +40,7 @@ end, { noremap = true, silent = true, desc = "substitute the word under the curs
 --第3个参数(escape_ks):传入false,表示不进一步转义按键字符串
 
 --format a line of chinese comment
-keymap.set('n', '<space>nl', '<cmd>MyFormatChineseCommentsLine<cr>', { desc = 'format a line of chinese comments' })
+keymap.set('n', '<space>nl', '<cmd>MyReplaceMarksLine<cr>', { desc = 'format a line of chinese comments' })
 
 --模拟ctrl + z来挂起nvim
 keymap.set("n", "<space>ff", "<c-z>", { desc = "Normal:ctrl + z" })
