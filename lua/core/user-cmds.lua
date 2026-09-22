@@ -30,6 +30,7 @@ end
 
 vim.api.nvim_create_user_command("MyReloadConfig", "source $MYVIMRC", { desc = "reload neovim configuration" })
 
+--替换当前buffer中的中文标点符号
 vim.api.nvim_create_user_command('MyReplaceMarks', function()
     local file_name = vim.fn.expand('%')
     local script = nvim_config_path .. "/scripts/text_replace_chinese_punctuation_marks.sh"
@@ -54,7 +55,7 @@ vim.api.nvim_create_user_command('MyReplaceMarks', function()
     --vim.cmd('!text_replace_chinese_punctuation_marks.sh ' .. file_name)
     --重新加载文件
     --vim.cmd('e ' .. file_name)
-end, { nargs = 0, desc = 'replace chinese punctuation marks' }
+end, { nargs = 0, desc = 'replace chinese punctuation marks in current buffer' }
 )
 
 local function has_user_exec(file_name)
@@ -203,9 +204,10 @@ vim.api.nvim_create_user_command("MyDeleteOtherBuffers", [[
 vim.api.nvim_create_user_command("MyDeleteAllBuffers", "bufdo bd", {})
 
 --替换一行里面的中文标点符号
-vim.api.nvim_create_user_command('MyFormatChineseCommentsLine', function()
+vim.api.nvim_create_user_command('MyReplaceMarksLine', function()
     vim.cmd([[
-        silent! s/\s\|。$//g
+        silent! s/\s\+$//g
+        silent! s/。$//g
         silent! s/，/,/g
         silent! s/：/:/g
         silent! s/（/(/g
@@ -213,14 +215,17 @@ vim.api.nvim_create_user_command('MyFormatChineseCommentsLine', function()
         silent! s/“/"/g
         silent! s/”/"/g
         silent! s/？/?/g
-        let @/=''
     ]])
-end, { desc = 'Format a line of chinese comments' })
+
+    --清空搜索寄存器
+    vim.fn.setreg('/', '')
+end, { desc = 'replace chinese punctuation marks in current line' })
 
 --替换整个buffer里面的中文标点符号
-vim.api.nvim_create_user_command('MyFormatChineseCommentsBuffer', function()
+vim.api.nvim_create_user_command('MyReplaceMarksBuffer', function()
     vim.cmd([[
-        silent! %s/\s\|。$//g
+        silent! %s/\s\+$//g
+        silent! %s/。$//g
         silent! %s/，/,/g
         silent! %s/：/:/g
         silent! %s/（/(/g
@@ -228,9 +233,11 @@ vim.api.nvim_create_user_command('MyFormatChineseCommentsBuffer', function()
         silent! %s/“/"/g
         silent! %s/”/"/g
         silent! %s/？/?/g
-        let @/=''
     ]])
-end, { desc = 'Format a buffer of chinese comments' })
+
+    --清空搜索寄存器
+    vim.fn.setreg('/', '')
+end, { desc = 'replace chinese punctuation marks in current buffer' })
 
 vim.api.nvim_create_user_command('MySortImports', function(opts)
     --获取当前文件的绝对路径
