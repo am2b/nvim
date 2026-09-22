@@ -42,7 +42,13 @@ return {
             ['<c-n>'] = { 'select_next', 'fallback' },
             ['<c-p>'] = { 'select_prev', 'fallback' },
 
-            --确认选择(使用该项)
+            --关闭
+            ['<c-e>'] = { 'hide', 'fallback' },
+
+            --如果没选中,先自动选中第一项,再接受
+            --['<c-y>'] = { 'select_and_accept', 'fallback' },
+
+            --接受当前已选中的项(菜单里必须有一项已经被高亮选中,但是因为设置了preselect = true,所以会自动选中第一项)
             ['<cr>'] = { 'accept', 'fallback' },
 
             --文档滚动
@@ -130,7 +136,18 @@ return {
         },
 
         cmdline = {
-            completion = { menu = { auto_show = true } },
+            completion = {
+                menu = { auto_show = true },
+                list = {
+                    selection = {
+                        preselect = false,
+                    },
+                },
+            },
+
+            --c-e:关闭
+            --c-y:如果没选中,先自动选中第一项,再接受(但是不执行)
+            --因为不会自动选择第一项,所以如果没有用tab/c-n/c-p选择某一项的话,那么直接按下回车就只会执行自己输入的字符
             keymap = { ['<cr>'] = { 'accept_and_enter', 'fallback' }, },
         },
         sources = {
@@ -155,4 +172,10 @@ return {
     },
 }
 
---cmdline补全还有问题(2026-09-21)
+--命令              行为                               前提条件
+--accept            接受当前已选中的项                 菜单里必须有一项已经被高亮选中
+--select_and_accept 如果没选中,先自动选中第一项,再接受 不需要预先选中,菜单打开就行
+
+--当preselect = false,这时菜单打开了但没有任何项被高亮,那么:
+--accept:什么都不发生(没有选中的项可接受),走fallback
+--select_and_accept:自动选中第一项并接受
