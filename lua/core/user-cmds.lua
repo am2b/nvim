@@ -185,6 +185,7 @@ vim.api.nvim_create_user_command('MyReplaceMarksLine', function()
         silent! s/。/,/g
         silent! s/，/,/g
         silent! s/、/,/g
+        silent! s/；/,/g
         silent! s/：/:/g
         silent! s/（/(/g
         silent! s/）/)/g
@@ -204,9 +205,10 @@ vim.api.nvim_create_user_command('MyReplaceMarksBuffer', function()
     vim.cmd([[
         silent! %s/\s\+$//g
         silent! %s/。$//g
-        silent! s/。/,/g
+        silent! %s/。/,/g
         silent! %s/，/,/g
-        silent! s/、/,/g
+        silent! %s/、/,/g
+        silent! %s/；/,/g
         silent! %s/：/:/g
         silent! %s/（/(/g
         silent! %s/）/)/g
