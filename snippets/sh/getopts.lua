@@ -19,8 +19,8 @@ return {
                         h)
                             usage 0
                             ;;
-                        *)
-                            echo "error:unsupported option -$opt" >>&2
+                        ?)
+                            echo "error:unsupported option -$OPTARG" >>&2
                             usage
                             ;;
                         esac
