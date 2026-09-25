@@ -115,5 +115,8 @@ return {
             { desc = "Telescope:find workspace symbols" })
 
         require("plugins.telescope-cmds")(builtin)
+
+        local my_commands = require("plugins.telescope-my")
+        vim.keymap.set('n', '<space>my', my_commands.my_commands, { desc = "Find My Commands" })
     end
 }
