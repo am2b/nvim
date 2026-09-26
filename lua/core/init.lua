@@ -1,7 +1,6 @@
 require("core.keymaps")
 require("core.text-objects")
 require("core.auto-cmds")
-require("core.user-cmds")
 require("core.abbreviations")
 require("core.provider")
 

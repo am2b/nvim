@@ -1,11 +1,11 @@
-local M = {}
+--按prefix过滤出命令列表,回车执行
 
+local M = {}
 local pickers = require("telescope.pickers")
 local finders = require("telescope.finders")
 local conf = require("telescope.config").values
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
-
 --取缓冲区的绝对目录,缓冲区无效/无名字时返回nil
 local function buffer_dir(bufnr)
     if not vim.api.nvim_buf_is_valid(bufnr) then
@@ -17,7 +17,6 @@ local function buffer_dir(bufnr)
     end
     return vim.fn.fnamemodify(name, ":p:h")
 end
-
 --把用户输入解析成真正要传给命令的参数
 --若输入是相对路径:优先按原缓冲区所在目录解析,其次按当前工作目录解析,
 --命中的文件/目录存在就替换为绝对路径,否则原样返回(可能根本不是路径)
@@ -27,14 +26,11 @@ local function resolve_input(input, orig_buf)
     if input == "" then
         return input
     end
-
     --已经是绝对路径 / 家目录路径,直接使用
     if input:match("^[/~]") then
         return input
     end
-
     local candidates = {}
-
     --相对"原缓冲区所在目录"解析
     if vim.api.nvim_buf_is_valid(orig_buf) then
         local buf_name = vim.api.nvim_buf_get_name(orig_buf)
@@ -43,29 +39,27 @@ local function resolve_input(input, orig_buf)
             candidates[#candidates + 1] = buf_dir .. "/" .. input
         end
     end
-
     --相对当前工作目录解析
     candidates[#candidates + 1] = vim.fn.getcwd() .. "/" .. input
-
     for _, candidate in ipairs(candidates) do
         if vim.fn.filereadable(candidate) == 1 or vim.fn.isdirectory(candidate) == 1 then
             return candidate
         end
     end
-
     return input
 end
-
 --实际执行命令
---执行时临时把当前缓冲区切回orig_buf,把工作目录切到orig_buf_dir,
---保证命令内部的expand('%'),getfperm(),相对路径都按正确上下文解析
+--执行时临时把当前缓冲区切回orig_buf、把工作目录切到orig_buf_dir,
+--保证命令内部的expand('%'),getfperm(),相对路径都按正确上下文解析。
+--注意:这里不用 nvim_buf_call(),因为它会在回调结束后【强制恢复】当前缓冲区,
+--会抢走命令自己打开的"嵌套 picker"的 prompt 缓冲区(如 TSBufFind 这类命令)。
+--改为手动切换 + 执行后检测:命令没有切换缓冲区就恢复,命令自己切走了就让渡。
 --command:命令元数据(nvim_get_commands的返回值)
 --input:用户输入(可能为空)
 --orig_buf:打开picker时所在的缓冲区号
 --orig_buf_dir:原缓冲区的绝对目录
 local function run_command(command, input, orig_buf, orig_buf_dir)
     local args = nil
-
     if input and input ~= "" then
         input = resolve_input(input, orig_buf)
         if command.nargs == "1" or command.nargs == "?" then
@@ -77,64 +71,75 @@ local function run_command(command, input, orig_buf, orig_buf_dir)
         end
     end
 
-    local cwd = vim.fn.getcwd()
-
     local execute = function()
         vim.api.nvim_cmd({ cmd = command.name, args = args }, {})
     end
 
+    local prev_buf = vim.api.nvim_get_current_buf()
+    local cwd = vim.fn.getcwd()
+    local ok, err
+
     if vim.api.nvim_buf_is_valid(orig_buf) then
-        --在原始缓冲区上下文里执行(expand('%'),% 等都基于它)
-        vim.api.nvim_buf_call(orig_buf, function()
-            --临时切到原缓冲区目录,执行完恢复
-            if orig_buf_dir and orig_buf_dir ~= cwd then
-                vim.fn.chdir(orig_buf_dir)
-            end
-            execute()
-            if orig_buf_dir and orig_buf_dir ~= cwd then
-                vim.fn.chdir(cwd)
-            end
-        end)
+        --1) 临时把当前缓冲区切回原缓冲区:命令内部 expand('%') / % / getfperm() 都基于它
+        vim.api.nvim_set_current_buf(orig_buf)
+
+        --2) 临时切到原缓冲区目录:相对路径按它解析(目录必须真实存在)
+        local chdir_done = false
+        if orig_buf_dir and orig_buf_dir ~= cwd and vim.fn.isdirectory(orig_buf_dir) == 1 then
+            chdir_done = pcall(vim.api.nvim_set_current_dir, orig_buf_dir)
+        end
+
+        ok, err = pcall(execute)
+
+        --3) 恢复当前缓冲区:若命令没有自行切换缓冲区(例如打开了新的 picker),
+        --   就恢复成执行前的;若命令自己切走了(例如 TSBufFind 打开嵌套 picker),
+        --   则让渡给新 picker,避免把新 picker 的 prompt 缓冲区抢走
+        if vim.api.nvim_get_current_buf() == orig_buf then
+            vim.api.nvim_set_current_buf(prev_buf)
+        end
+
+        --4) 恢复工作目录
+        if chdir_done then
+            pcall(vim.api.nvim_set_current_dir, cwd)
+        end
     else
         --原缓冲区已失效:直接按当前上下文执行
-        execute()
+        ok, err = pcall(execute)
     end
-end
 
+    return ok, err
+end
 --打开命令选择器
---opts:可选配置:
--- prefix:命令名前缀过滤,默认"My"
--- prompt_title:提示标题,默认"My Commands"
-function M.my_commands(opts)
+--opts:可选配置:prefix:命令名前缀过滤,prompt_title:提示标题
+function M.commands(opts)
     opts = opts or {}
-    local prefix = opts.prefix or "My"
+
+    local prefix = opts.prefix
+    if not prefix or prefix == "" then
+        vim.notify('commands:需要显式传入prefix,如commands({ prefix = "My" })',
+            vim.log.levels.ERROR, { title = "commands.picker" })
+        return
+    end
 
     --记住打开 picker 时的缓冲区与它的目录(此刻 cwd 正确,相对缓冲区名展开可靠)
     local orig_buf = vim.api.nvim_get_current_buf()
     local orig_buf_dir = buffer_dir(orig_buf)
-
-    local commands = vim.api.nvim_get_commands({})
+    local nvim_commands = vim.api.nvim_get_commands({})
     local results = {}
-
-    for name, command in pairs(commands) do
+    for name, command in pairs(nvim_commands) do
         if name:sub(1, #prefix) == prefix then
             table.insert(results, command)
         end
     end
-
     table.sort(results, function(a, b)
         return a.name < b.name
     end)
-
     pickers.new({}, {
-        prompt_title = opts.prompt_title or "My Commands",
-
+        prompt_title = opts.prompt_title or "it's not too late",
         finder = finders.new_table({
             results = results,
-
             entry_maker = function(command)
                 local display = command.name
-
                 if command.desc and command.desc ~= "" then
                     display = string.format(
                         "%-30s %s",
@@ -142,7 +147,6 @@ function M.my_commands(opts)
                         command.desc
                     )
                 end
-
                 return {
                     value = command,
                     display = display,
@@ -151,35 +155,28 @@ function M.my_commands(opts)
                 }
             end,
         }),
-
         sorter = conf.generic_sorter({}),
-
         attach_mappings = function(prompt_bufnr, _)
             actions.select_default:replace(function()
                 local entry = action_state.get_selected_entry()
                 if not entry then
                     return
                 end
-
                 local command = entry.value
                 if not command then
                     return
                 end
-
                 actions.close(prompt_bufnr)
-
                 --不需要参数的命令:直接执行
                 if command.nargs == "0" then
                     local ok, err = pcall(function()
                         run_command(command, nil, orig_buf, orig_buf_dir)
                     end)
-
                     if not ok then
                         vim.notify(err, vim.log.levels.ERROR, { title = command.name })
                     end
                     return
                 end
-
                 --需要参数的命令:先询问参数,再执行
                 vim.ui.input({
                     prompt = command.name .. " ",
@@ -187,17 +184,14 @@ function M.my_commands(opts)
                     if input == nil then
                         return
                     end
-
                     local ok, err = pcall(function()
                         run_command(command, input, orig_buf, orig_buf_dir)
                     end)
-
                     if not ok then
                         vim.notify(err, vim.log.levels.ERROR, { title = command.name })
                     end
                 end)
             end)
-
             return true
         end,
     }):find()

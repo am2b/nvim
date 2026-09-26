@@ -118,4 +118,5 @@ require('lazy').setup({
 }, { install = { missing = true }, ui = { border = 'rounded' } })
 
 require("core")
+require("commands")
 require("tools")

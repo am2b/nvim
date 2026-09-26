@@ -81,6 +81,7 @@ return {
         },
     },
 
+    --config在telescope插件加载后才执行
     config = function(_, opts)
         --clone the default telescope configuration(default is rg)
         local vimgrep_arguments = { unpack(require("telescope.config").values.vimgrep_arguments) }
@@ -114,9 +115,14 @@ return {
         vim.keymap.set('n', '<leader>fs', builtin.lsp_dynamic_workspace_symbols,
             { desc = "Telescope:find workspace symbols" })
 
-        require("plugins.telescope-cmds")(builtin)
-
-        local my_commands = require("plugins.telescope-my")
-        vim.keymap.set('n', '<space>my', my_commands.my_commands, { desc = "Find My Commands" })
-    end
+        --commands
+        require("commands.ts")
+        vim.keymap.set('n', '<space>ts', function()
+            --require("commands.picker"):写在回调函数内部
+            require("commands.picker").commands({ prefix = "TS" })
+        end, { desc = "Find TS Commands" })
+        vim.keymap.set('n', '<space>my', function()
+            require("commands.picker").commands({ prefix = "My" })
+        end, { desc = "Find My Commands" })
+    end,
 }

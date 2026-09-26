@@ -1,9 +1,3 @@
---注意:命令的名字必须以大写字母开头
-
---highlighting the selection on yank
---replaced by plugin:yanky.nvim
---vim.cmd[[au TextYankPost * silent! lua vim.highlight.on_yank {timeout=500,on_visual=false}]]
-
 local nvim_config_path = vim.fn.stdpath("config")
 
 --校验shell脚本是否可读,具备可执行权限
@@ -17,6 +11,11 @@ local function check_shell_script_valid(script_path)
     --判断文件是否拥有可执行权限
     --getfperm返回格式示例:rwxr-xr-x,最后一位是当前用户执行位
     local file_perm = vim.fn.getfperm(script_path)
+    --读取权限失败
+    if file_perm == "" then
+        vim.notify(string.format("无法读取脚本权限:%s", script_path), vim.log.levels.ERROR)
+        return false
+    end
     if file_perm:sub(3, 3) ~= "x" then
         vim.notify(
             string.format("脚本无执行权限,请执行:chmod +x %s", script_path),
@@ -27,8 +26,6 @@ local function check_shell_script_valid(script_path)
 
     return true
 end
-
-vim.api.nvim_create_user_command("MyReloadConfig", "source $MYVIMRC", { desc = "reload neovim configuration" })
 
 local function has_user_exec(file_name)
     local perm = vim.fn.getfperm(file_name)
@@ -44,7 +41,8 @@ end
 --vim.uv是neovim内置的LibUV接口,用于异步操作文件和系统功能
 --fs_stat(file_name)返回一个表,包含目标文件的详细信息,如大小,模式,修改时间等,如果文件不存在或访问失败,返回nil
 vim.api.nvim_create_user_command("MyAddX", function()
-    local file_name = vim.fn.expand('%')
+    --用绝对路径,不依赖执行时的cwd/缓冲区名重写等隐式行为
+    local file_name = vim.fn.expand('%:p')
     if file_name == "" then
         print("no file to make executable")
         return
@@ -62,7 +60,7 @@ vim.api.nvim_create_user_command("MyAddX", function()
 end, { nargs = 0, desc = 'add executable permission to current file' })
 
 vim.api.nvim_create_user_command("MyRemoveX", function()
-    local file_name = vim.fn.expand('%')
+    local file_name = vim.fn.expand('%:p')
     if file_name == "" then
         print("no file to make executable")
         return
@@ -80,7 +78,7 @@ vim.api.nvim_create_user_command("MyRemoveX", function()
 end, { nargs = 0, desc = 'remove executable permission from current file' })
 
 vim.api.nvim_create_user_command("MyToggleX", function()
-    local file_name = vim.fn.expand('%')
+    local file_name = vim.fn.expand('%:p')
     if file_name == "" then
         print("no file to toggle execute permission")
         return
@@ -115,7 +113,8 @@ vim.api.nvim_create_user_command('MyInsertPass', function(opts)
 
     --当nargs为"?"时opts.args是可选参数,那么没有传递参数时opts.args的值默认为空字符串,而空字符串在lua里面被认为是true
     local len = opts.args ~= "" and opts.args or "64"
-    local command = string.format("%s %s", script, len)
+    --script和len都转义,防止路径/参数含空格或特殊字符时被shell拆断
+    local command = string.format("%s %s", vim.fn.shellescape(script), vim.fn.shellescape(len))
     --vim.fn.systemlist():执行外部命令并捕获输出
     --vim.fn.systemlist("command")返回一个表(数组),每个元素是一行命令输出,[1]表示从vim.fn.systemlist的返回值中获取第一行的内容
     local result = vim.fn.systemlist(command)
@@ -232,7 +231,7 @@ vim.api.nvim_create_user_command('MySortImports', function(opts)
         end
 
         --执行bash脚本,并传递当前python文件路径
-        vim.fn.system('bash ' .. script .. ' ' .. vim.fn.shellscape(file_path))
+        vim.fn.system('bash ' .. vim.fn.shellescape(script) .. ' ' .. vim.fn.shellescape(file_path))
         --刷新当前文件(重新加载buffer)
         vim.api.nvim_command('edit')
     end
