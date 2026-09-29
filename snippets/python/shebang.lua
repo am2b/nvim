@@ -39,6 +39,32 @@ return {
         fmta(
             [[
                 #!/usr/bin/env uv run
+
+                # /// script
+                # requires-python = ">>=3.12"
+                # dependencies = [
+                # ]
+                # ///
+
+                <>
+            ]],
+
+            { i(0) }
+        ),
+
+        { condition = is_first_line }
+    ),
+    s(
+        {
+            trig = ";myuv",
+            dscr = "#!/usr/bin/env uv run",
+            snippetType = "autosnippet",
+        },
+
+        fmta(
+            [[
+                #!/usr/bin/env uv run
+
                 # /// script
                 # requires-python = ">>=3.12"
                 # dependencies = [
@@ -60,7 +86,7 @@ return {
                     sys.exit(main())
             ]],
 
-            {i(1),i(2),i(3),i(0)}
+            { i(1), i(2), i(3), i(0) }
         ),
 
         { condition = is_first_line }
