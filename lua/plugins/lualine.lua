@@ -53,6 +53,16 @@ return {
 
                 lualine_c = {
                     {
+                        function()
+                            return "● DEBUG"
+                        end,
+                        cond = function() -- 关键：非调试时整个组件（含分隔符）完全隐藏
+                            return vim.g.dap_active
+                        end,
+                        color = { fg = '#ffffff', bg = '#e51400', gui = 'bold' },
+                    },
+
+                    {
                         'filename',
                         symbols = {
                             modified = '[+]',
@@ -65,6 +75,16 @@ return {
                 },
 
                 lualine_x = {
+                    -- 组件1：调试徽标
+                    --{
+                    --    function()
+                    --        return "● DEBUG"
+                    --    end,
+                    --    cond = function() -- 关键：非调试时整个组件（含分隔符）完全隐藏
+                    --        return vim.g.dap_active
+                    --    end,
+                    --    color = { fg = '#ffffff', bg = '#e51400', gui = 'bold' },
+                    --},
                     {
                         'searchcount',
                     },
