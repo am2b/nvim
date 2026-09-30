@@ -82,6 +82,8 @@ require('lazy').setup({
     --nvim-lspconfig:用于简化语言服务器的配置
     { import = 'plugins.nvim-lspconfig' },
 
+    { import = 'plugins.nvim-dap' },
+
     --Snippet engine
     { import = 'plugins.luasnip' },
 
