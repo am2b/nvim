@@ -123,13 +123,14 @@ return {
             vim.keymap.set("n", "<space>dr", dap.repl.open)
 
             --悬停看值
-            vim.keymap.set("n", "<leader>de", function() require("dapui").eval() end)
-            vim.keymap.set("v", "<leader>de", function() require("dapui").eval() end)
+            vim.keymap.set("n", "<space>de", function() require("dapui").eval() end)
+            vim.keymap.set("v", "<space>de", function() require("dapui").eval() end)
 
             --go
             require("dap-go").setup()
-            vim.keymap.set("n", "<leader>dt", function() require("dap-go").debug_test() end)
-            vim.keymap.set("n", "<leader>dl", function() require("dap-go").debug_last_test() end)
+            --光标放在测试函数上
+            vim.keymap.set("n", "<space>dt", function() require("dap-go").debug_test() end)
+            vim.keymap.set("n", "<space>dl", function() require("dap-go").debug_last_test() end)
         end
 
     }
