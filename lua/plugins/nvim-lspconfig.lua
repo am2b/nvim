@@ -8,32 +8,50 @@ return {
     config = function()
         --外部格式化器
         local nvim_script_path = vim.fn.stdpath("config") .. "/scripts/"
-
-        --异步执行外部命令,防止分页,阻塞
+        --异步执行外部命令,防止分页,阻塞,捕获子进程输出用于报错定位
         local function async_sh(cmd, opts)
             opts = opts or {}
-            vim.fn.jobstart(cmd, {
+            local output = {}
+            local job = vim.fn.jobstart(cmd, {
+                stdout_buffered = true,
+                stderr_buffered = true,
+                on_stdout = function(_, data)
+                    if data then
+                        output[#output + 1] = table.concat(data, "\n")
+                    end
+                end,
+                on_stderr = function(_, data)
+                    if data then
+                        output[#output + 1] = table.concat(data, "\n")
+                    end
+                end,
                 on_exit = function(_, code)
                     if code == 0 then
                         if not opts.silent then
                             vim.notify("✅ 格式化完成", vim.log.levels.INFO)
                         end
-                        --可选:自动刷新buffer,确保格式化后的文件立即更新
+                        --自动刷新buffer,确保格式化后的文件立即更新
                         vim.cmd("checktime")
                     else
-                        vim.notify("❌ 格式化失败:" .. table.concat(cmd, " "), vim.log.levels.ERROR)
+                        vim.notify(
+                            "❌ 格式化失败: " .. table.concat(cmd, " ") .. "\n" .. table.concat(output, "\n"),
+                            vim.log.levels.ERROR
+                        )
                     end
                 end,
             })
+            if job <= 0 then
+                vim.notify("❌ 无法启动进程: " .. table.concat(cmd, " "), vim.log.levels.ERROR)
+            end
         end
 
         local formatters = {}
         formatters.sh = function()
-            async_sh({ "shfmt", "-i", "4", "-ci", "-sr", "-w", vim.fn.expand("%") })
+            async_sh({ "shfmt", "-i", "4", "-ci", "-sr", "-w", vim.fn.expand("%:p") })
         end
         formatters.bash = formatters.sh
         local prettier_fmt = function()
-            async_sh({ nvim_script_path .. "format_prettier.sh", vim.fn.expand("%") })
+            async_sh({ nvim_script_path .. "format_prettier.sh", vim.fn.expand("%:p") })
         end
         formatters.javascript = prettier_fmt
         formatters.typescript = prettier_fmt
@@ -45,7 +63,7 @@ return {
         formatters.yaml = prettier_fmt
         formatters.markdown = prettier_fmt
         formatters.python = function()
-            async_sh({ nvim_script_path .. "format_python.sh", vim.fn.expand("%") })
+            async_sh({ nvim_script_path .. "format_python.sh", vim.fn.expand("%:p") })
         end
 
         --------------------------------------------------
