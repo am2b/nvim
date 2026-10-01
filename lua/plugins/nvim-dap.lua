@@ -51,7 +51,10 @@ return {
                 },
             })
 
-            --行内变量值(virtual text)(前提:Go的treesitter解析器已安装:TSInstall go)
+            --行内变量值(virtual text)
+            --前提:
+            --Go的treesitter解析器已安装:TSInstall go
+            --Python的treesitter解析器已安装:TSInstall python
             require("nvim-dap-virtual-text").setup({
                 enabled = true,
                 --会话结束自动清除
