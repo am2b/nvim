@@ -83,6 +83,7 @@ require('lazy').setup({
     { import = 'plugins.nvim-lspconfig' },
 
     { import = 'plugins.nvim-dap' },
+    { import = 'plugins.nvim-dap-python' },
 
     --Snippet engine
     { import = 'plugins.luasnip' },
