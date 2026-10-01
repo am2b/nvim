@@ -52,11 +52,13 @@ return {
                 },
 
                 lualine_c = {
+                    --nvim-dap.lua:负责更新vim.g.dap_active的值
                     {
                         function()
                             return "● DEBUG"
                         end,
-                        cond = function() -- 关键：非调试时整个组件（含分隔符）完全隐藏
+                        --非调试时整个组件(含分隔符)完全隐藏
+                        cond = function()
                             return vim.g.dap_active
                         end,
                         color = { fg = '#ffffff', bg = '#e51400', gui = 'bold' },
