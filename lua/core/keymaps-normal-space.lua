@@ -41,6 +41,8 @@ end, { noremap = true, silent = true, desc = "substitute the word under the curs
 
 --format a line of chinese comment
 keymap.set('n', '<space>nl', '<cmd>MyReplaceMarksLine<cr>', { desc = 'format a line of chinese comments' })
+--删除当前行里面的所有空白字符
+keymap.set('n', '<space>ns', '<cmd>MyDeleteWhitespaceCharactersLine<cr>', { desc = 'delete all whitespace characters in the current line' })
 
 --模拟ctrl + z来挂起nvim
 keymap.set("n", "<space>ff", "<c-z>", { desc = "Normal:ctrl + z" })

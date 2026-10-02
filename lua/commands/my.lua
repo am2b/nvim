@@ -220,6 +220,10 @@ vim.api.nvim_create_user_command('MyReplaceMarksBuffer', function()
     vim.fn.setreg('/', '')
 end, { desc = 'replace chinese punctuation marks in current buffer' })
 
+vim.api.nvim_create_user_command('MyDeleteWhitespaceCharactersLine', function()
+    vim.cmd([[silent! s/\s//g]])
+end, {})
+
 vim.api.nvim_create_user_command('MySortImports', function(opts)
     --获取当前文件的绝对路径
     local file_path = vim.fn.expand('%:p')
@@ -236,3 +240,5 @@ vim.api.nvim_create_user_command('MySortImports', function(opts)
         vim.api.nvim_command('edit')
     end
 end, {})
+
+--vim.cmd():neovim的lua API,用于执行vim的原生ex命令(即冒号:后面的命令)
