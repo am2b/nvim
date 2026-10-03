@@ -46,3 +46,6 @@ keymap.set('n', '<space>ns', '<cmd>MyDeleteWhitespaceCharactersLine<cr>', { desc
 
 --模拟ctrl + z来挂起nvim
 keymap.set("n", "<space>ff", "<c-z>", { desc = "Normal:ctrl + z" })
+
+--执行command mode的上一条命令
+keymap.set('n', '<space>aa', '@:', { desc = 'execute last command in command mode' })

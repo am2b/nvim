@@ -15,7 +15,7 @@ vim.keymap.set({ "n" }, "<leader>;", function()
     end,
     { desc = "Normal:Jump to a line by flash" })
 
---在normal,visual,模式下,依据当前光标位置来对周围的tree-sitter结构进行标记,选择label后,被label包围的部分自动选中
+--在normal,visual模式下,依据当前光标位置来对周围的tree-sitter结构进行标记,选择label后,被label包围的部分自动选中
 --在operator_pending模式下,依据当前光标位置来对周围的tree-sitter结构进行标记,选择label后,被label包围的部分自动完成operator_pending的"母"动作
 --这种情况下,也支持通过;和,来扩展和缩小选中的范围(标签)
 vim.keymap.set({ "n", "x", "o" }, "S", function() flash.treesitter() end,
