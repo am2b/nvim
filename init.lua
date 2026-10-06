@@ -79,6 +79,8 @@ require('lazy').setup({
 
     { import = 'plugins.nvim-treesitter' },
 
+    { import = 'plugins.nvim-treesitter-textobjects' },
+
     --nvim-lspconfig:用于简化语言服务器的配置
     { import = 'plugins.nvim-lspconfig' },
 
