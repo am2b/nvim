@@ -93,6 +93,8 @@ require('lazy').setup({
     --自动补全
     { import = 'plugins.blink' },
 
+    { import = 'plugins.replace' },
+
     --Improved yank and put functionalities
     { import = 'plugins.yanky' },
 
