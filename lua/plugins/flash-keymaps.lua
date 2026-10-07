@@ -22,6 +22,8 @@ vim.keymap.set({ "n", "x", "o" }, "S", function() flash.treesitter() end,
     { desc = "Normal-Visual-Operator_pending:Pick treesitter node by flash" })
 
 --[[
+光标站在原地不动,远程操作某个对象(下面的示例是yank iw,也可以是比如cr w等)
+如果使用S的话,就类似于下面的R了
 for example:
 1,press yr to start yanking and open flash
 2,enter the characters you are interested
@@ -33,7 +35,8 @@ for example:
 --]]
 vim.keymap.set({ "o" }, "r", function() flash.remote() end, { desc = "Operator_pending:Remotely operate by flash" })
 
---基于输入的字符,找到包含输入的字符的tree-sitter结构,然后对该tree-sitter结构进行层次化的不同粒度的标记
+--还是远程操作某个对象,与上面不同的是:这次是基于tree-sitter的(后面说的"母"动作,就是比如yR的y,或者cR的c等)
+--基于输入的字符,找到包含输入字符的tree-sitter结构,然后对该tree-sitter结构进行层次化的不同粒度的标记
 --选择好给出的label后:
 --在visual模式下,自动将被label包围的部分选中
 --在operator_pending模式下,被label包围的部分自动完成"母"动作
