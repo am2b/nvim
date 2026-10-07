@@ -12,17 +12,17 @@ return {
         })
 
         --[/]f:函数开头,[/]F/:函数结尾
-        vim.keymap.set({ "n", "x", "o" }, "]f", function()
-            require("nvim-treesitter-textobjects.move").goto_next_start("@function.outer", "textobjects")
-        end)
         vim.keymap.set({ "n", "x", "o" }, "[f", function()
             require("nvim-treesitter-textobjects.move").goto_previous_start("@function.outer", "textobjects")
         end)
-        vim.keymap.set({ "n", "x", "o" }, "]F", function()
-            require("nvim-treesitter-textobjects.move").goto_next_end("@function.outer", "textobjects")
+        vim.keymap.set({ "n", "x", "o" }, "]f", function()
+            require("nvim-treesitter-textobjects.move").goto_next_start("@function.outer", "textobjects")
         end)
         vim.keymap.set({ "n", "x", "o" }, "[F", function()
             require("nvim-treesitter-textobjects.move").goto_previous_end("@function.outer", "textobjects")
+        end)
+        vim.keymap.set({ "n", "x", "o" }, "]F", function()
+            require("nvim-treesitter-textobjects.move").goto_next_end("@function.outer", "textobjects")
         end)
 
         vim.keymap.set({ "x", "o" }, "af", function()
