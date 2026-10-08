@@ -20,11 +20,6 @@ return {
     end,
 
     config = function()
-        --默认4秒才刷新
-        vim.opt.updatetime = 100
-        --无更改也显示符号列:yes
-        vim.opt.signcolumn = "yes"
-
         --查看上/下一个更改(can take a preceding count)
         vim.keymap.set("n", "[c", "<Plug>(GitGutterPrevHunk)", { silent = true, desc = "GitGutter:Previous hunk" })
         vim.keymap.set("n", "]c", "<Plug>(GitGutterNextHunk)", { silent = true, desc = "GitGutter:Next hunk" })
