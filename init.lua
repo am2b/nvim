@@ -42,7 +42,10 @@ require('lazy').setup({
     { import = 'plugins.tokyonight' },
 
     --A dependency library for many plugins
-    { import = 'plugins.plenary' },
+    {
+        'nvim-lua/plenary.nvim',
+        lazy = true
+    },
 
     --Provides Nerd Font icons for use by neovim plugins
     { import = 'plugins.icons' },
