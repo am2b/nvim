@@ -38,6 +38,8 @@ set.number = true
 --用于控制触发自动命令,CursorHold等事件的时间,also controls the delay before vim writes its swap file
 set.updatetime = 200
 
+set.hidden = true
+
 --highlight cursor line
 set.cursorline = true
 --set.cursorcolumn = true
