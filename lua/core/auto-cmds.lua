@@ -31,17 +31,17 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
---自动保存
-local auto_save_excluded_types = { lua = true }
-vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
-    group = augroup_user,
-    pattern = "*",
-    callback = function()
-        if not auto_save_excluded_types[vim.bo.filetype] then
-            vim.cmd("silent! wall")
-        end
-    end,
-})
+--自动保存(代码没问题,可以正常工作)
+--local auto_save_excluded_types = { lua = true }
+--vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
+--    group = augroup_user,
+--    pattern = "*",
+--    callback = function()
+--        if not auto_save_excluded_types[vim.bo.filetype] then
+--            vim.cmd("silent! wall")
+--        end
+--    end,
+--})
 
 --vim.api.nvim_create_autocmd('FileType', {
 --    group = augroup_user,
