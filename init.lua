@@ -48,7 +48,7 @@ require('lazy').setup({
     { import = 'plugins.icons' },
 
     --Seamless navigation between tmux panes and vim splits
-    { import = 'plugins.tmux-navigator' },
+    { 'christoomey/vim-tmux-navigator' },
 
     --A snazzy bufferline for neovim
     { import = 'plugins.bufferline' },
