@@ -7,10 +7,17 @@ return {
     keys = {
         { '<space>ut', vim.cmd.UndotreeToggle, desc = 'Toggle undotree' },
     },
+
+    init = function()
+        -- 打开面板时焦点进入树窗口
+        vim.g.undotree_SetFocusWhenToggle = 1
+        -- 布局1-4(默认1:diff面板在树下方,2:diff横贯底部)
+        vim.g.undotree_WindowLayout = 2
+        -- 时间标签缩短为"2 h"形式
+        vim.g.undotree_ShortIndicators = 1
+    end,
 }
 
---every change has a sequence number and it is displayed before timestamps
---the current state is marked as > number <
---the [ number ] marks the most recent change
---the next state which will be restored by :redo or <ctrl-r> is marked as { number }
---saved changes are marked as s and the big S indicates the most recent saved change
+--q:关闭
+-->num<:当前,{num}:下次redo,[num]:最新,s/S:保存,=num=:diff标记
+--D:toggle diff窗口
