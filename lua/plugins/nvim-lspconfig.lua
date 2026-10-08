@@ -30,7 +30,7 @@ return {
                         if not opts.silent then
                             vim.notify("✅ 格式化完成", vim.log.levels.INFO)
                         end
-                        --自动刷新buffer,确保格式化后的文件立即更新
+                        --重载buffer,确保格式化后的文件立即更新
                         vim.cmd("checktime")
                     else
                         vim.notify(
@@ -72,23 +72,52 @@ return {
         local function format_buffer()
             local ft = vim.bo.filetype
 
+            --外部格式化器(shfmt/prettier/python):操作的是磁盘文件
             if formatters[ft] then
+                --先存盘,否则格式化的是磁盘旧内容
+                if vim.bo.modified and vim.fn.expand("%:p") ~= "" then
+                    vim.cmd("write")
+                end
                 --使用外部格式化器(异步)
                 formatters[ft]()
                 return
             end
 
             if ft == "go" then
+                if #vim.lsp.get_clients({ bufnr = 0, capability = "textDocument/formatting" }) == 0 then
+                    vim.notify("没有支持格式化的LSP附着,请确认gopls已安装且已attach", vim.log.levels.WARN)
+                    return
+                end
+                --格式化前统一存储
+                vim.cmd("write")
                 --同步格式化:阻塞直到gopls写完,再立即转tab为空格,无竞态
                 vim.lsp.buf.format({ async = false })
+                --决定retab的方向是tab->空格
                 vim.bo.expandtab = true
-                vim.cmd("retab!")
+                --不带!:只替换作为空白部分的tab(行首缩进,空白对齐),字符串/注释里的tab不动
+                vim.cmd("retab")
+                --retab又改了buffer,最后落盘
+                vim.cmd("write")
                 return
             end
 
             --使用默认的LSP格式化
-            vim.lsp.buf.format({ async = true })
+            --格式化前统一存储
+            vim.cmd("write")
+            --async = true:异步,函数会立即返回,格式化可能还没跑完,此时write保存的是没格式化过的旧buffer
+            --只有同步等格式化完成,才能保存结果,代价是:文件很大或服务器很慢时,<space>fm会卡一下(默认超时5秒,可加timeout_ms = 3000 控制)
+            --如果不能接受卡顿,就改成保留async = true且不加末尾的write(格式化完后手动:w)
+            vim.lsp.buf.format({ async = false })
+            vim.cmd("write")
         end
+
+        --------------------------------------------------
+
+        --inlay hints:显示参数名/推断类型等灰色小字
+        --vim.keymap.set("n", "<space>ih", function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({})) end, { desc = "Toggle inlay hints" })
+
+        --诊断浮窗圆角
+        vim.diagnostic.config({ float = { border = "rounded" }, signs = true })
 
         --------------------------------------------------
 
@@ -114,35 +143,18 @@ return {
                 --跳转到定义
                 map("n", "gd", vim.lsp.buf.definition, "Go to definition")
 
-                --跳转到声明(有些语言区分定义和声明)
-                --map("n", "gD", vim.lsp.buf.declaration, "Go to declaration")
-
                 --格式化
                 map("n", "<space>fm", format_buffer, "Format buffer")
 
-                --显示悬停文档
-                --map("n", "K", vim.lsp.buf.hover, "Hover documentation")
-
-                --重命名变量
-                --map("n", "<leader>rn", vim.lsp.buf.rename, "Rename symbol")
-
                 --诊断信息相关
                 --浮窗查看当前光标位置的诊断信息
-                map("n", "<leader>e", vim.diagnostic.open_float, "Show diagnostics")
+                map("n", "<space>sd", vim.diagnostic.open_float, "Show diagnostics")
 
                 --跳转到上/下一个报错或警告
-                map("n", "[d", vim.diagnostic.goto_prev, "Previous diagnostic")
-                map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
+                map("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end, "Previous diagnostic")
+                map("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end, "Next diagnostic")
             end,
         })
-
-        --------------------------------------------------
-
-        --LSP capabilities
-        --capabilities告诉LSP:neovim客户端都支持什么功能
-        --LSP是客户端-服务端结构,客户端(neovim)要告诉服务端(比如Pyright):"我支持代码补全,代码片段,文档支持,跳转功能等"
-        --然后我们把这个capabilities传给每个语言服务器:opts.capabilities = capabilities
-        local capabilities = require("blink.cmp").get_lsp_capabilities()
 
         --------------------------------------------------
 
@@ -156,6 +168,11 @@ return {
                     Lua = {
                         runtime = { version = "LuaJIT" },
                         diagnostics = { globals = { "vim", "hs" } },
+                        workspace = {
+                            library = { vim.env.VIMRUNTIME },
+                            checkThirdParty = false,
+                        },
+                        telemetry = { enable = false },
                     },
                 },
             },
@@ -167,9 +184,16 @@ return {
 
         --------------------------------------------------
 
+        --LSP capabilities
+        --capabilities告诉LSP:neovim客户端都支持什么功能
+        --LSP是客户端-服务端结构,客户端(neovim)要告诉服务端(比如Pyright):"我支持代码补全,代码片段,文档支持,跳转功能等"
+        --然后我们把这个capabilities传给每个语言服务器:opts.capabilities = capabilities
+        local capabilities = require("blink.cmp").get_lsp_capabilities()
+
         --Enable LSP servers
+        vim.lsp.config('*', { capabilities = capabilities })
         for name, opts in pairs(servers) do
-            opts.capabilities = capabilities
+            --opts.capabilities = capabilities
             --添加/修改名为name的LSP配置(以合并的方式)
             vim.lsp.config(name, opts)
             vim.lsp.enable(name)
@@ -181,5 +205,7 @@ return {
 --grr:references(引用)
 --gri:implementation(实现)
 --gra:code_action(代码动作)
---grn:rename(重命名)
+--grn:rename(重命名:光标移到符号上 -> 按grn -> 底部弹出输入框(预填当前名字) -> 输入新名字 -> Enter)
 --grt:type_definition,gO:document_symbol,insert <c-s>:signature_help
+--gD:跳转到声明
+--K:hover documentation
