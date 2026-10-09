@@ -101,7 +101,7 @@ require('lazy').setup({
     --Improved yank and put functionalities
     { import = 'plugins.yanky' },
 
-    --Edit filesystem like edit a text
+    --Edit the filesystem like editing a text file
     {
         'elihunter173/dirbuf.nvim',
         keys = {
