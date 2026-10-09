@@ -3,7 +3,7 @@
 return {
     'folke/flash.nvim',
 
-    event = { "BufNewFile", "BufReadPost" },
+    event = { 'VeryLazy' },
 
     opts = {
         search = {
@@ -35,11 +35,6 @@ return {
                 multi_line = false,
                 --when using jump labels,don't use these keys,this allows using those keys directly after the motion
                 label = { exclude = "hjkliardcxv" },
-            },
-
-            search = {
-                --disable flash during the regular search:/ or ?
-                enabled = false,
             },
         },
     },
