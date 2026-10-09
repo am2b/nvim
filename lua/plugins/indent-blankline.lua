@@ -32,13 +32,13 @@ return {
                 highlight = highlight,
                 --char = '┊',
             },
-            --关闭默认的:当前缩进层级高亮
+            --关闭代码作用域的下划线
             scope = {
                 enabled = false,
             },
             --这些文件类型不显示缩进线
             exclude = {
-                filetypes = { 'help', 'dashboard', 'markdown' },
+                filetypes = { 'dashboard', 'markdown' },
             },
         }
     end
