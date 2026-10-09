@@ -1,3 +1,5 @@
+--https://github.com/saghen/blink.cmp
+
 return {
     'saghen/blink.cmp',
     version = '1.*',
@@ -121,7 +123,7 @@ return {
             default = { 'lsp', 'path', 'snippets', 'buffer' },
 
             providers = {
-                --配置buffer源
+                --配置buffer
                 buffer = {
                     opts = {
                         --只从普通文件buffer取词(排除terminal/help等特殊buffer)
@@ -131,6 +133,15 @@ return {
                             end, vim.api.nvim_list_bufs())
                         end,
                     },
+                },
+
+                --配置command line
+                cmdline = {
+                    min_keyword_length = function(ctx)
+                        --执行:命令的时候,仅当输入字符>=3时,才会触发补全
+                        if ctx.mode == 'cmdline' and string.find(ctx.line, ' ') == nil then return 3 end
+                        return 0
+                    end,
                 },
             },
         },
@@ -145,21 +156,14 @@ return {
                 },
             },
 
-            --c-e:关闭
-            --c-y:如果没选中,先自动选中第一项,再接受(但是不执行)
-            --因为不会自动选择第一项,所以如果没有用tab/c-n/c-p选择某一项的话,那么直接按下回车就只会执行自己输入的字符
-            keymap = { ['<cr>'] = { 'accept_and_enter', 'fallback' }, },
-        },
-        sources = {
-            providers = {
-                cmdline = {
-                    min_keyword_length = function(ctx)
-                        --执行:命令的时候,仅当输入字符>=3时,才会触发补全
-                        if ctx.mode == 'cmdline' and string.find(ctx.line, ' ') == nil then return 3 end
-                        return 0
-                    end
-                }
-            }
+            keymap = {
+                --显示声明
+                --c-e:关闭
+                --c-y:如果没选中,先自动选中第一项,再接受(但是不执行)
+                preset = 'cmdline',
+                --因为不会自动选择第一项,所以如果没有用tab/c-n/c-p选择某一项的话,那么直接按下回车就只会执行自己输入的字符
+                ['<cr>'] = { 'accept_and_enter', 'fallback' },
+            },
         },
 
         --模糊匹配引擎
@@ -171,6 +175,9 @@ return {
         },
     },
 }
+
+--诊断
+--:BlinkCmp status
 
 --命令              行为                               前提条件
 --accept            接受当前已选中的项                 菜单里必须有一项已经被高亮选中
