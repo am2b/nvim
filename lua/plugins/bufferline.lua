@@ -9,17 +9,9 @@ return {
 
     opts = {
         options = {
-            --显示buffers而不是tabs
-            mode = "buffers",
             --显示buffer ID
             numbers = "buffer_id",
-            --如果安装了nvim-web-devicons,显示buffer图标
-            show_buffer_icons = true,
-            --显示tab指示器
-            show_tab_indicators = true,
-            --设置分隔符风格
-            --separator_style = "slant",
-            --在tab上显示错误(buffer名字变红)
+            --tab上buffer名字的颜色会等于诊断的颜色
             diagnostics = 'nvim_lsp',
         },
     },
@@ -30,3 +22,5 @@ return {
         { ')', '<cmd>BufferLineCycleNext<cr>', desc = 'Go to next buffer' },
     },
 }
+
+--依赖vim.opt.termguicolors = true
