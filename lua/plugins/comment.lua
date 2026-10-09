@@ -12,22 +12,18 @@ return {
     },
 }
 
---:h comment-nvim
---:h comment.config
-
 --normal mode:
 --line-comment:gcc
---block-comment:gbc - toggles the current line using blockwise comment
-
---operator-pending mode:
---line-comment:gc
---block-comment:gb
---gc[count]{motion}:toggles the region using linewise comment
---gb[count]{motion}:toggles the region using blockwise comment
+--block-comment:gbc
 
 --gco:insert comment to the next line and enters insert mode
 --gcO:insert comment to the previous line and enters insert mode
 --gcA:insert comment to end of the current line and enters insert mode
 
+--operator-pending mode:
+--line-comment:gc[count]{motion}
+--block-comment:gb[count]{motion}
+
+--af/ac需要文本对象:nvim-treesitter-textobjects
 --gbaf:toggle comment around a function
 --gbac:toggle comment around a class
