@@ -101,10 +101,12 @@ require('lazy').setup({
     --Improved yank and put functionalities
     { import = 'plugins.yanky' },
 
-    --Lets you edit your filesystem like you edit text
+    --Edit filesystem like edit a text
     {
-        --引入plugins/dirbuf.lua文件中的配置表作为插件的opts
-        import = 'plugins.dirbuf',
+        'elihunter173/dirbuf.nvim',
+        keys = {
+            { "-", "<cmd>Dirbuf<cr>", desc = "Open Dirbuf" },
+        },
     },
 
     --Hightlights ranges you have entered in commandline
